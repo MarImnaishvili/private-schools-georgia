@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model School {
+  id          Int      @id @default(autoincrement())
+  name        String
+  address     String
+  phoneNumber String
+  schoolsWebSite String
+  otherSocialLinks String
+  founder     String
+  director    String
+  publicRelationsManager String
+  parentRelationshipManager String
+
+  infrastructure  String   // JSON stringified
+  primary         String   // JSON stringified
+  basic           String   // JSON stringified
+  secondary       String   // JSON stringified
+
+  otherPrograms   String
+  description     String
+  photoUrls       String   // JSON stringified
+  tutor           Boolean
+  scholarshipsGrants Boolean
+  exchangePrograms Boolean
+  outdoorGarden    Boolean
+
+  createdAt   DateTime @default(now())
+}
+
+

@@ -1,0 +1,25 @@
+-- CreateTable
+CREATE TABLE "School" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "phoneNumber" TEXT NOT NULL,
+    "schoolsWebSite" TEXT NOT NULL,
+    "otherSocialLinks" TEXT NOT NULL,
+    "founder" TEXT NOT NULL,
+    "director" TEXT NOT NULL,
+    "publicRelationsManager" TEXT NOT NULL,
+    "parentRelationshipManager" TEXT NOT NULL,
+    "infrastructure" TEXT NOT NULL,
+    "primary" TEXT NOT NULL,
+    "basic" TEXT NOT NULL,
+    "secondary" TEXT NOT NULL,
+    "otherPrograms" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "photoUrls" TEXT NOT NULL,
+    "tutor" BOOLEAN NOT NULL,
+    "scholarshipsGrants" BOOLEAN NOT NULL,
+    "exchangePrograms" BOOLEAN NOT NULL,
+    "outdoorGarden" BOOLEAN NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
