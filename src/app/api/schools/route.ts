@@ -1,72 +1,171 @@
-// src/app/api/schools/route.ts
-import { prisma } from "@/lib/prisma";
+//app/api/schools/route.ts
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { stringifyBigInts } from "@/lib/stringifyBigInts";
 
-// GET all schools
-export async function GET() {
-  try {
-    const schools = await prisma.school.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+const prisma = new PrismaClient();
 
-    const parsed = schools.map((school) => ({
-      ...school,
-      photoUrls: JSON.parse(school.photoUrls),
-      infrastructure: JSON.parse(school.infrastructure),
-      primary: JSON.parse(school.primary),
-      basic: JSON.parse(school.basic),
-      secondary: JSON.parse(school.secondary),
-    }));
-
-    return NextResponse.json(parsed);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { error: "Failed to fetch schools" },
-      { status: 500 }
-    );
-  }
-}
-
-// POST a new school
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const newSchool = await prisma.school.create({
+    const newSchool = await prisma.schoolData.create({
       data: {
         name: body.name,
-        address: body.address,
-        phoneNumber: body.phoneNumber,
+        phoneNumber1: body.phoneNumber1?.toString() || null,
+        phoneNumber2: body.phoneNumber2?.toString() || null,
+        phoneNumber3: body.phoneNumber3?.toString() || null,
         schoolsWebSite: body.schoolsWebSite,
-        otherSocialLinks: body.otherSocialLinks,
+        facebookProfileURL: body.facebookProfileURL,
+        instagramProfileURL: body.instagramProfileURL,
         founder: body.founder,
         director: body.director,
         publicRelationsManager: body.publicRelationsManager,
         parentRelationshipManager: body.parentRelationshipManager,
-
-        infrastructure: JSON.stringify(body.infrastructure),
-        primary: JSON.stringify(body.primary),
-        basic: JSON.stringify(body.basic),
-        secondary: JSON.stringify(body.secondary),
-
-        otherPrograms: body.otherPrograms,
         description: body.description,
-        photoUrls: JSON.stringify(body.photoUrls),
-
-        tutor: body.tutor,
+        hasTutor: body.hasTutor,
+        tutorDescription: body.tutorDescription,
+        hasScholarshipsGrants: body.hasScholarshipsGrants,
         scholarshipsGrants: body.scholarshipsGrants,
+        hasExchangePrograms: body.hasExchangePrograms,
         exchangePrograms: body.exchangePrograms,
+        hasOutdoorGarden: body.hasOutdoorGarden,
         outdoorGarden: body.outdoorGarden,
+        otherPrograms: body.otherPrograms || null, // now a string column
+        address: {
+          create: {
+            city: body.address.city,
+            street: body.address.street,
+            zipCode: body.address.zipCode ? parseInt(body.address.zipCode) : 0,
+            district: body.address.district,
+          },
+        },
+
+        infrastructure: {
+          create: {
+            buildings_has: body.infrastructure.buildings,
+            numberOfFloors_has: body.infrastructure.numberOfFloors,
+            squareness_has: body.infrastructure.squareness,
+            stadiums_has: body.infrastructure.stadiums,
+            pools_has: body.infrastructure.pools,
+            courtyard_has: body.infrastructure.courtyard,
+            laboratories_has: body.infrastructure.laboratories,
+            library_has: body.infrastructure.library,
+            cafe_has: body.infrastructure.cafe,
+            // Set all _comment fields to null or default for now
+            buildings_comment: null,
+            numberOfFloors_comment: null,
+            squareness_comment: null,
+            stadiums_comment: null,
+            pools_comment: null,
+            courtyard_comment: null,
+            laboratories_comment: null,
+            library_comment: null,
+            cafe_comment: null,
+          },
+        },
+
+        primaryLevel: {
+          create: {
+            price: body.primary.price,
+            schoolUniform: body.primary.schoolUniform,
+            discountAndPaymentTerms: body.primary.discountAndPaymentTerms,
+            numberOfStudents: body.primary.numberOfStudents,
+            meals: body.primary.meals,
+            mealsDescription: body.primary.mealsDescription,
+            transportation: body.primary.transportation,
+            mandatorySportsClubs: Array.isArray(
+              body.primary.mandatorySportsClubs
+            )
+              ? body.primary.mandatorySportsClubs.join(",")
+              : body.primary.mandatorySportsClubs,
+
+            teachingStyleBooks: body.primary.teachingStyleBooks,
+            textbooksPrice: body.primary.textbooksPrice || null,
+            clubsAndCircles: body.primary.clubsAndCircles,
+            duration: body.primary.duration,
+            media: body.primary.schoolUniformPhotoUrls?.length
+              ? {
+                  create: body.primary.schoolUniformPhotoUrls.map(
+                    (url: string) => ({
+                      url,
+                      type: "photo",
+                    })
+                  ),
+                }
+              : undefined,
+          },
+        },
+        basicLevel: {
+          create: {
+            price: body.basic.price,
+            schoolUniform: body.basic.schoolUniform,
+            discountAndPaymentTerms: body.basic.discountAndPaymentTerms,
+            numberOfStudents: body.basic.numberOfStudents,
+            meals: body.basic.meals,
+            mealsDescription: body.basic.mealsDescription,
+            transportation: body.basic.transportation,
+            mandatorySportsClubs: Array.isArray(body.basic.mandatorySportsClubs)
+              ? body.basic.mandatorySportsClubs.join(",")
+              : body.basic.mandatorySportsClubs,
+
+            teachingStyleBooks: body.basic.teachingStyleBooks,
+            textbooksPrice: body.basic.textbooksPrice || null,
+            clubsAndCircles: body.basic.clubsAndCircles,
+            duration: body.basic.duration,
+            media: body.basic.schoolUniformPhotoUrls?.length
+              ? {
+                  create: body.basic.schoolUniformPhotoUrls.map(
+                    (url: string) => ({
+                      url,
+                      type: "photo",
+                    })
+                  ),
+                }
+              : undefined,
+          },
+        },
+        secondaryLevel: {
+          create: {
+            price: body.secondary.price,
+            schoolUniform: body.secondary.schoolUniform,
+            discountAndPaymentTerms: body.secondary.discountAndPaymentTerms,
+            numberOfStudents: body.secondary.numberOfStudents,
+            meals: body.secondary.meals,
+            mealsDescription: body.secondary.mealsDescription,
+            transportation: body.secondary.transportation,
+            mandatorySportsClubs: Array.isArray(
+              body.secondary.mandatorySportsClubs
+            )
+              ? body.secondary.mandatorySportsClubs.join(",")
+              : body.secondary.mandatorySportsClubs,
+
+            teachingStyleBooks: body.secondary.teachingStyleBooks,
+            textbooksPrice: body.secondary.textbooksPrice || null,
+            clubsAndCircles: body.secondary.clubsAndCircles,
+            duration: body.secondary.duration,
+            media: body.secondary.schoolUniformPhotoUrls?.length
+              ? {
+                  create: body.secondary.schoolUniformPhotoUrls.map(
+                    (url: string) => ({
+                      url,
+                      type: "photo",
+                    })
+                  ),
+                }
+              : undefined,
+          },
+        },
       },
     });
-
-    return NextResponse.json(newSchool, { status: 201 });
+    return NextResponse.json(stringifyBigInts(newSchool), { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { error: "Failed to create school" },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect(); // cleanly disconnect after query
   }
 }

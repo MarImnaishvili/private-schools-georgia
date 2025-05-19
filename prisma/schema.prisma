@@ -3,36 +3,178 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-model School {
-  id          Int      @id @default(autoincrement())
-  name        String
-  address     String
-  phoneNumber String
-  schoolsWebSite String
-  otherSocialLinks String
-  founder     String
-  director    String
-  publicRelationsManager String
-  parentRelationshipManager String
+model SchoolData {
+  id                        Int             @id @default(autoincrement())
+  name                      String
+  addressId                 Int
+  phoneNumber1              BigInt?
+  phoneNumber2              BigInt?
+  phoneNumber3              BigInt?
+  schoolsWebSite            String?
+  facebookProfileURL        String?
+  instagramProfileURL       String?
+  founder                   String?
+  director                  String?
+  publicRelationsManager    String?
+  parentRelationshipManager String?
+  infrastructureId          Int?
+  primaryLevelId            Int?
+  basicLevelId              Int?
+  secondaryLevelID          Int?
+  otherPrograms             String?
+  description               String?
+  hasTutor                  Boolean         @default(false)
+  tutorDescription          String?
+  hasScholarshipsGrants     Boolean         @default(false)
+  scholarshipsGrants        String?
+  hasExchangePrograms       Boolean         @default(false)
+  exchangePrograms          String?
+  hasOutdoorGarden          Boolean         @default(false)
+  outdoorGarden             String?
+  createdAt                 DateTime        @default(now())
+  createdBy                 DateTime?
+  updatedAt                 DateTime        @updatedAt
+  updatedBy                 DateTime?
+  address                   Address         @relation(fields: [addressId], references: [addressId])
+  basicLevel                BasicLevel?     @relation(fields: [basicLevelId], references: [basicLevelId])
+  infrastructure            Infrastructure? @relation(fields: [infrastructureId], references: [infrastructureId])
+  primaryLevel              PrimaryLevel?   @relation(fields: [primaryLevelId], references: [primaryLevelId])
+  secondaryLevel            SecondaryLevel? @relation(fields: [secondaryLevelID], references: [secondaryLevelID])
+  media                     Media[]
 
-  infrastructure  String   // JSON stringified
-  primary         String   // JSON stringified
-  basic           String   // JSON stringified
-  secondary       String   // JSON stringified
-
-  otherPrograms   String
-  description     String
-  photoUrls       String   // JSON stringified
-  tutor           Boolean
-  scholarshipsGrants Boolean
-  exchangePrograms Boolean
-  outdoorGarden    Boolean
-
-  createdAt   DateTime @default(now())
+  @@index([addressId], map: "SchoolData_addressId_fkey")
+  @@index([basicLevelId], map: "SchoolData_basicLevelId_fkey")
+  @@index([infrastructureId], map: "SchoolData_infrastructureId_fkey")
+  @@index([primaryLevelId], map: "SchoolData_primaryLevelId_fkey")
+  @@index([secondaryLevelID], map: "SchoolData_secondaryLevelID_fkey")
 }
 
+model Address {
+  addressId Int          @id @default(autoincrement())
+  city      String
+  district  String
+  street    String
+  zipCode   Int
+  schools   SchoolData[]
+}
 
+model Infrastructure {
+  infrastructureId       Int          @id @default(autoincrement())
+  buildings_has          Boolean      @default(false)
+  buildings_comment      String?
+  numberOfFloors_has     Int?
+  numberOfFloors_comment String?
+  squareness_has         Int?
+  squareness_comment     String?
+  stadiums_has           Boolean      @default(false)
+  stadiums_comment       String?
+  pools_has              Boolean      @default(false)
+  pools_comment          String?
+  courtyard_has          Boolean      @default(false)
+  courtyard_comment      String?
+  laboratories_has       Boolean      @default(false)
+  laboratories_comment   String?
+  library_has            Boolean      @default(false)
+  library_comment        String?
+  cafe_has               Boolean      @default(false)
+  cafe_comment           String?
+  schools                SchoolData[]
+}
+
+model PrimaryLevel {
+  primaryLevelId            Int          @id @default(autoincrement())
+  price                     Decimal
+  duration                  String
+  discountAndPaymentTerms   String?
+  numberOfStudents          Int
+  meals                     String?
+  mealsDescription          String?
+  transportation            String?
+  transportationDescription String?
+  schoolUniform             Boolean      @default(false)
+  schoolUniformDescription  String?
+  mandatorySportsClubs      String?
+  optionalSportsClubs       String?
+  foreignLanguages          String?
+  teachingStyleBooks        String?
+  clubsAndCircles           String?
+  textbooksPrice            String?
+  schools                   SchoolData[]
+  media                     Media[]
+}
+
+model BasicLevel {
+  basicLevelId              Int          @id @default(autoincrement())
+  price                     Decimal
+  duration                  String
+  discountAndPaymentTerms   String?
+  numberOfStudents          Int
+  meals                     String?
+  mealsDescription          String?
+  transportation            String?
+  transportationDescription String?
+  schoolUniform             Boolean      @default(false)
+  schoolUniformDescription  String?
+  mandatorySportsClubs      String?
+  optionalSportsClubs       String?
+  foreignLanguages          String?
+  teachingStyleBooks        String?
+  clubsAndCircles           String?
+  textbooksPrice            String?
+  schools                   SchoolData[]
+  media                     Media[]
+}
+
+model SecondaryLevel {
+  secondaryLevelID          Int          @id @default(autoincrement())
+  price                     Decimal
+  duration                  String
+  discountAndPaymentTerms   String?
+  numberOfStudents          Int
+  meals                     String?
+  mealsDescription          String?
+  transportation            String?
+  transportationDescription String?
+  schoolUniform             Boolean      @default(false)
+  schoolUniformDescription  String?
+  mandatorySportsClubs      String?
+  optionalSportsClubs       String?
+  foreignLanguages          String?
+  teachingStyleBooks        String?
+  clubsAndCircles           String?
+  textbooksPrice            String?
+  schools                   SchoolData[]
+  media                     Media[]
+}
+
+model Media {
+  id               Int             @id @default(autoincrement())
+  mediaUrl         String          @map("media_url") @db.Text
+  type             MediaType
+  description      String?         @db.Text
+  schoolId         Int?            @map("school_id")
+  basicLevelId     Int?            @map("basic_level_id")
+  primaryLevelId   Int?            @map("primary_level_id")
+  secondaryLevelId Int?            @map("secondary_level_id")
+  createdAt        DateTime?       @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt        DateTime?       @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  school           SchoolData?     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_1")
+  basicLevel       BasicLevel?     @relation(fields: [basicLevelId], references: [basicLevelId], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_2")
+  primaryLevel     PrimaryLevel?   @relation(fields: [primaryLevelId], references: [primaryLevelId], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_3")
+  secondaryLevel   SecondaryLevel? @relation(fields: [secondaryLevelId], references: [secondaryLevelID], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_4")
+
+  @@index([basicLevelId], map: "basic_level_id")
+  @@index([primaryLevelId], map: "primary_level_id")
+  @@index([schoolId], map: "school_id")
+  @@index([secondaryLevelId], map: "secondary_level_id")
+  @@map("media")
+}
+
+enum MediaType {
+  photo
+  video
+}

@@ -1,35 +1,54 @@
-//app/[locale]/schools/new
+//app/[locale]/schools/new/page
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useTranslations } from "next-intl";
+import { FormData } from "../../../../types/formData";
+import TopLevelFields from "@/components/forms/TopLevelFields";
+import InfrastructureFields from "@/components/forms/InfrastructureSection";
+import AddressFields from "@/components/forms/AddressSection";
+import SchoolLevelFields from "@/components/forms/SchoolLevelSection";
 
 export default function NewSchoolPage() {
   const tForm = useTranslations("form");
   const tInfra = useTranslations("infrastructure");
-  const tPrimary = useTranslations("primary");
-  const tBasic = useTranslations("basic");
-  const tSecondary = useTranslations("secondary");
+  const tLevel = useTranslations("level");
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
-    address: "",
-    phoneNumber: "",
+    phoneNumber1: "",
+    phoneNumber2: "",
+    phoneNumber3: "",
     schoolsWebSite: "",
-    otherSocialLinks: "",
+    facebookProfileURL: "",
+    instagramProfileURL: "",
+    establishedYear: 0, //დაემატა
+    accreditationStatus: [], //დაემატა
+    accreditationComment: "", // დაემატა
     founder: "",
     director: "",
     publicRelationsManager: "",
     parentRelationshipManager: "",
+    graduationRate: "", //დაემატა
+    averageNationalExamScore: "", //დაემატა
     description: "",
     otherPrograms: "",
-    tutor: false,
-    scholarshipsGrants: false,
-    exchangePrograms: false,
-    outdoorGarden: false,
-    photoUrls: [],
+    hasTutor: false,
+    tutorDescription: "",
+    hasScholarshipsGrants: false,
+    scholarshipsGrants: "",
+    hasExchangePrograms: false,
+    exchangePrograms: "",
+    hasOutdoorGarden: false,
+    outdoorGarden: "",
+    address: {
+      city: "",
+      street: "",
+      zipCode: "",
+      district: "",
+    },
     infrastructure: {
       buildings: false,
       numberOfFloors: 0,
@@ -39,153 +58,92 @@ export default function NewSchoolPage() {
       courtyard: false,
       laboratories: false,
       library: false,
+      computerLab: false,
       cafe: false,
     },
     primary: {
       price: 0,
       discountAndPaymentTerms: "",
       numberOfStudents: 0,
-      meals: false,
-      mealsIncludedInThePrice: false,
-      transportation: false,
+      meals: "",
+      mealsDescription: "",
+      transportation: "",
       schoolUniform: false,
       schoolUniformPhotoUrls: [],
       mandatorySportsClubs: [],
       teachingStyleBooks: "",
-      textbooksPrice: 0,
+      textbooksPrice: "",
       clubsAndCircles: "",
+      duration: "",
     },
     basic: {
       price: 0,
       discountAndPaymentTerms: "",
       numberOfStudents: 0,
-      meals: false,
-      mealsIncludedInThePrice: false,
-      transportation: false,
+      meals: "",
+      mealsDescription: "",
+      transportation: "",
       schoolUniform: false,
       schoolUniformPhotoUrls: [],
       mandatorySportsClubs: [],
       teachingStyleBooks: "",
-      textbooksPrice: 0,
+      textbooksPrice: "",
       clubsAndCircles: "",
+      duration: "",
     },
     secondary: {
       price: 0,
       discountAndPaymentTerms: "",
       numberOfStudents: 0,
-      meals: false,
-      mealsIncludedInThePrice: false,
-      transportation: false,
+      meals: "",
+      mealsDescription: "",
+      transportation: "",
       schoolUniform: false,
       schoolUniformPhotoUrls: [],
       mandatorySportsClubs: [],
       teachingStyleBooks: "",
-      textbooksPrice: 0,
+      textbooksPrice: "",
       clubsAndCircles: "",
+      duration: "",
     },
   });
 
   const handleTopLevelChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
-    const target = e.target;
-    const name = target.name as keyof typeof formData;
-    const value =
-      target.type === "checkbox"
-        ? (target as HTMLInputElement).checked
-        : target.value;
+    const { name, value, type } = e.target;
+
+    const newValue =
+      type === "checkbox" && "checked" in e.target
+        ? (e.target as HTMLInputElement).checked
+        : value;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
-  const handleNestedChange = (
-    section: keyof typeof formData,
-    field: string,
+  const handleNestedChange = <
+    T extends keyof Pick<
+      FormData,
+      "infrastructure" | "primary" | "basic" | "secondary" | "address"
+    >
+  >(
+    section: T,
+    field: keyof FormData[T],
     value: any
   ) => {
-    const sectionData = formData[section];
-
-    if (typeof sectionData === "object" && sectionData !== null) {
-      setFormData((prev) => ({
-        ...prev,
-        [section]: {
-          ...sectionData,
-          [field]: value,
-        },
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: value,
+      },
+    }));
   };
-
-  const renderLevelSection = (
-    level: "primary" | "basic" | "secondary",
-    t: ReturnType<typeof useTranslations>
-  ) => (
-    <div className="space-y-2">
-      <input
-        type="number"
-        placeholder={t("price")}
-        onChange={(e) => handleNestedChange(level, "price", +e.target.value)}
-        className="w-full border p-2"
-      />
-      <input
-        placeholder={t("discountAndPaymentTerms")}
-        onChange={(e) =>
-          handleNestedChange(level, "discountAndPaymentTerms", e.target.value)
-        }
-        className="w-full border p-2"
-      />
-      <input
-        type="number"
-        placeholder={t("numberOfStudents")}
-        onChange={(e) =>
-          handleNestedChange(level, "numberOfStudents", +e.target.value)
-        }
-        className="w-full border p-2"
-      />
-      {[
-        "meals",
-        "mealsIncludedInThePrice",
-        "transportation",
-        "schoolUniform",
-      ].map((key) => (
-        <label key={key} className="block">
-          <input
-            type="checkbox"
-            checked={
-              formData[level][key as keyof typeof formData.primary] as boolean
-            }
-            onChange={(e) => handleNestedChange(level, key, e.target.checked)}
-          />{" "}
-          {t(key)}
-        </label>
-      ))}
-      <input
-        placeholder={t("teachingStyleBooks")}
-        onChange={(e) =>
-          handleNestedChange(level, "teachingStyleBooks", e.target.value)
-        }
-        className="w-full border p-2"
-      />
-      <input
-        type="number"
-        placeholder={t("textbooksPrice")}
-        onChange={(e) =>
-          handleNestedChange(level, "textbooksPrice", +e.target.value)
-        }
-        className="w-full border p-2"
-      />
-      <input
-        placeholder={t("clubsAndCircles")}
-        onChange={(e) =>
-          handleNestedChange(level, "clubsAndCircles", e.target.value)
-        }
-        className="w-full border p-2"
-      />
-    </div>
-  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,68 +159,23 @@ export default function NewSchoolPage() {
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">{tForm("addNewSchool")}</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {[
-          "name",
-          "address",
-          "phoneNumber",
-          "schoolsWebSite",
-          "otherSocialLinks",
-          "founder",
-          "director",
-          "publicRelationsManager",
-          "parentRelationshipManager",
-        ].map((field) => (
-          <input
-            key={field}
-            name={field}
-            placeholder={tForm(field)}
-            onChange={handleTopLevelChange}
-            className="w-full border p-2"
-          />
-        ))}
+        <TopLevelFields formData={formData} onChange={handleTopLevelChange} />
 
-        <textarea
-          name="description"
-          placeholder={tForm("description")}
-          onChange={handleTopLevelChange}
-          className="w-full border p-2"
-        />
-        <textarea
-          name="otherPrograms"
-          placeholder={tForm("otherPrograms")}
-          onChange={handleTopLevelChange}
-          className="w-full border p-2"
+        <AddressFields
+          address={formData.address}
+          onChange={(field, value) =>
+            handleNestedChange("address", field, value)
+          }
+          t={tForm}
         />
 
-        <h2 className="text-xl mt-6 font-semibold">
-          {tForm("infrastructure")}
-        </h2>
-        {Object.entries(formData.infrastructure).map(([key, value]) => (
-          <div key={key}>
-            {typeof value === "boolean" ? (
-              <label>
-                <input
-                  type="checkbox"
-                  checked={value}
-                  onChange={(e) =>
-                    handleNestedChange("infrastructure", key, e.target.checked)
-                  }
-                />{" "}
-                {tInfra(key)}
-              </label>
-            ) : (
-              <input
-                type="number"
-                placeholder={tInfra(key)}
-                value={value}
-                onChange={(e) =>
-                  handleNestedChange("infrastructure", key, +e.target.value)
-                }
-                className="w-full border p-2"
-              />
-            )}
-          </div>
-        ))}
+        <InfrastructureFields
+          infrastructure={formData.infrastructure}
+          onChange={(field, value) =>
+            handleNestedChange("infrastructure", field, value)
+          }
+          t={tInfra}
+        />
 
         <h2 className="text-xl mt-6 font-semibold">{tForm("schoolLevels")}</h2>
         <Tabs defaultValue="primary" className="w-full">
@@ -272,33 +185,50 @@ export default function NewSchoolPage() {
             <TabsTrigger value="secondary">{tForm("secondary")}</TabsTrigger>
           </TabsList>
           <TabsContent value="primary">
-            {renderLevelSection("primary", tPrimary)}
+            <SchoolLevelFields
+              level="primary"
+              data={formData.primary}
+              onChange={handleNestedChange}
+              t={tLevel}
+            />
           </TabsContent>
           <TabsContent value="basic">
-            {renderLevelSection("basic", tBasic)}
+            <SchoolLevelFields
+              level="basic"
+              data={formData.basic}
+              onChange={handleNestedChange}
+              t={tLevel}
+            />
           </TabsContent>
           <TabsContent value="secondary">
-            {renderLevelSection("secondary", tSecondary)}
+            <SchoolLevelFields
+              level="secondary"
+              data={formData.secondary}
+              onChange={handleNestedChange}
+              t={tLevel}
+            />
           </TabsContent>
         </Tabs>
 
         <h2 className="text-xl mt-6 font-semibold">{tForm("otherFeatures")}</h2>
-        {[
-          "tutor",
-          "scholarshipsGrants",
-          "exchangePrograms",
-          "outdoorGarden",
-        ].map((flag) => (
-          <label key={flag}>
-            <input
-              type="checkbox"
-              name={flag}
-              checked={formData[flag as keyof typeof formData] as boolean}
-              onChange={handleTopLevelChange}
-            />{" "}
-            {tForm(flag)}
-          </label>
-        ))}
+        <div className="space-y-2">
+          {[
+            { key: "hasTutor", label: "tutor" },
+            { key: "hasScholarshipsGrants", label: "scholarshipsGrants" },
+            { key: "hasExchangePrograms", label: "exchangePrograms" },
+            { key: "hasOutdoorGarden", label: "outdoorGarden" },
+          ].map(({ key, label }) => (
+            <label key={key} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                name={key}
+                checked={formData[key as keyof FormData] as boolean}
+                onChange={handleTopLevelChange}
+              />
+              <span>{tForm(label)}</span>
+            </label>
+          ))}
+        </div>
 
         <button
           type="submit"

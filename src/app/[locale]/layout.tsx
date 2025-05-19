@@ -7,7 +7,9 @@ type Props = {
 };
 
 export default async function LocaleLayout({ children, params }: Props) {
-  const { locale } = params;
+  const { locale } = await Promise.resolve(params);
+
+  // Ensure you await if params is asynchronous
   const messages = (await import(`@/messages/${locale}.json`)).default;
 
   return (
