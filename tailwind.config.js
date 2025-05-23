@@ -1,11 +1,10 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx}", // Adjust paths for your Next.js app folder
+    "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}", // If you have pages folder
+    "./pages/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
   },

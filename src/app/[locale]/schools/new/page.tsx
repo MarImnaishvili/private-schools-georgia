@@ -44,7 +44,7 @@ export default function NewSchoolPage() {
       schoolsWebSite: "",
       facebookProfileURL: "",
       instagramProfileURL: "",
-      establishedYear: 0,
+      establishedYear: 1900,
       accreditationStatus: "", //დაემატა sanaxavia
       accreditationComment: "", // დაემატა
       founder: "",
