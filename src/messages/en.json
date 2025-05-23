@@ -9,6 +9,7 @@
     "schoolCreated": "School Created",
     "errorCreatingSchool": "Error Creating School",
     "name": "School Name",
+    "Name": "School Name",
     "address": "Address",
     "phoneNumber1": "Primary Phone Number",
     "phoneNumber2": "Secondary Phone Number",
@@ -39,7 +40,9 @@
     "addNewSchool": "Add New School",
     "accredited": "accredited",
     "notAccredited": "not accredited",
-    "inProgress": "in progress"
+    "inProgress": "in progress",
+    "media": "photo/video",
+    "required": "required"
   },
   "infrastructure": {
     "title": "Infrastructure",
@@ -105,5 +108,22 @@
     "didube-chugureti": "didube-chugureti",
     "dzveli-tbilisi": "dzveli-tbilisi",
     "tbilisis shemogareni": "tbilisis shemogareni"
+  },
+  "media": {
+    "Add New Media": "Add new photo/video",
+    "Save Media": "Save",
+    "Media": "photo/video",
+    "Media URL": "photo/video URL",
+    "Photo": "Photo",
+    "Video": "Video",
+    "School": "About School",
+    "Primary": "Primary",
+    "Basic": "Basic",
+    "Secondary": "Secondary",
+    "Remove": "Remove",
+    "Add Media Item": "Add photo/video",
+    "Media Items": "photo/video Items",
+    "Description": "Description",
+    "Description (optional)": "Description (optional)"
   }
 }

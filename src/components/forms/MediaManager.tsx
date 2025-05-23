@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/forms/MediaManager.tsx
 import React from "react";
+import { useTranslations } from "next-intl";
 
 export interface MediaItem {
   mediaUrl: string;
   description: string;
   type: "photo" | "video";
   attachedTo: "school" | "primary" | "basic" | "secondary";
+  attachedId: number; // NEW
 }
 
 interface MediaManagerProps {
@@ -15,6 +17,7 @@ interface MediaManagerProps {
 }
 
 export default function MediaManager({ media, onChange }: MediaManagerProps) {
+  const tMedia = useTranslations("media");
   const handleChange = (index: number, field: keyof MediaItem, value: any) => {
     const newMedia = [...media];
     (newMedia[index][field] as any) = value;
@@ -29,6 +32,7 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
         description: "",
         type: "photo",
         attachedTo: "school",
+        attachedId: 0, // ✅ default to 0 or any placeholder number
       },
     ]);
   };
@@ -40,7 +44,7 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
 
   return (
     <div>
-      <h2>Media Items</h2>
+      <h2>{tMedia("Media Items")}</h2>
       {media.map((item, i) => (
         <div key={i} className="mb-4 border p-2 rounded">
           <input
@@ -52,11 +56,21 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
           />
           <input
             type="text"
-            placeholder="Description"
+            placeholder={tMedia("Description")}
             value={item.description}
             onChange={(e) => handleChange(i, "description", e.target.value)}
             className="block mb-1 w-full"
           />
+          <input
+            type="number"
+            placeholder="Attached ID"
+            value={item.attachedId}
+            onChange={(e) =>
+              handleChange(i, "attachedId", Number(e.target.value))
+            }
+            className="block mb-1 w-full"
+          />
+
           <select
             value={item.type}
             onChange={(e) =>
@@ -64,8 +78,8 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
             }
             className="block mb-1 w-full"
           >
-            <option value="photo">Photo</option>
-            <option value="video">Video</option>
+            <option value="photo">{tMedia("Photo")}</option>
+            <option value="video">{tMedia("Video")}</option>
           </select>
           <select
             value={item.attachedTo}
@@ -78,13 +92,13 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
             }
             className="block mb-1 w-full"
           >
-            <option value="school">School</option>
-            <option value="primary">Primary</option>
-            <option value="basic">Basic</option>
-            <option value="secondary">Secondary</option>
+            <option value="school">{tMedia("School")}</option>
+            <option value="primary">{tMedia("Primary")}</option>
+            <option value="basic">{tMedia("Basic")}</option>
+            <option value="secondary">{tMedia("Secondary")}</option>
           </select>
           <button onClick={() => handleRemove(i)} className="text-red-600">
-            Remove
+            {tMedia("Remove")}
           </button>
         </div>
       ))}
@@ -92,7 +106,7 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
         onClick={handleAdd}
         className="bg-blue-600 text-white px-3 py-1 rounded"
       >
-        Add Media Item
+        {tMedia("Add Media Item")}
       </button>
     </div>
   );

@@ -1,8 +1,12 @@
+//app/components/forms/AddressSection
 "use client";
 
 import React from "react";
 import { useTranslations } from "next-intl";
-import { AddressProps } from "@/types/formData";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { SchoolFormData } from "@/schemas/schema";
+import { Card, CardContent } from "../ui/Card";
+import { Label } from "../ui/Label";
 
 const districtOptions = [
   "vake-saburtalo",
@@ -13,46 +17,84 @@ const districtOptions = [
   "tbilisis shemogareni",
 ];
 
-export default function AddressSection({ address, onChange }: AddressProps) {
+type Props = {
+  register: UseFormRegister<SchoolFormData>;
+  errors: FieldErrors<SchoolFormData>;
+};
+
+export default function AddressSection({ register, errors }: Props) {
   const t = useTranslations("address");
 
   return (
-    <div className="space-y-2">
-      <h2 className="text-xl mt-6 font-semibold">{t("address")}</h2>
+    <Card className="p-4 mb-6">
+      <CardContent className="grid gap-4">
+        <h2 className="text-xl font-semibold">{t("address")}</h2>
 
-      <input
-        placeholder={t("city")}
-        value={address.city}
-        onChange={(e) => onChange("city", e.target.value)}
-        className="w-full border p-2"
-      />
-      <input
-        placeholder={t("street")}
-        value={address.street}
-        onChange={(e) => onChange("street", e.target.value)}
-        className="w-full border p-2"
-      />
-      <input
-        placeholder={t("zipCode")}
-        value={address.zipCode}
-        onChange={(e) => onChange("zipCode", e.target.value)}
-        className="w-full border p-2"
-      />
-      <label className="block">
-        {t("district")}
-        <select
-          value={address.district}
-          onChange={(e) => onChange("district", e.target.value)}
-          className="w-full border p-2"
-        >
-          <option value="">{t("selectDistrict")}</option>
-          {districtOptions.map((d) => (
-            <option key={d} value={d}>
-              {t(d)}
-            </option>
-          ))}
-        </select>
-      </label>
-    </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="address.city">{t("city")}</Label>
+          <input
+            id="address.city"
+            placeholder={t("city")}
+            {...register("address.city")}
+            className="w-full border p-2"
+          />
+          {errors.address?.city && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.address.city.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <Label htmlFor="address.street">{t("street")}</Label>
+          <input
+            id="address.street"
+            placeholder={t("street")}
+            {...register("address.street")}
+            className="w-full border p-2"
+          />
+          {errors.address?.street && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.address.street.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="address.zipCode">{t("zipCode")}</Label>
+          <input
+            id="address.zipCode"
+            placeholder={t("zipCode")}
+            {...register("address.zipCode")}
+            className="w-full border p-2"
+          />
+          {errors.address?.zipCode && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.address.zipCode.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="block mb-1">{t("district")}</label>
+          <select
+            {...register("address.district")}
+            className="w-full border p-2"
+          >
+            <option value="">{t("selectDistrict")}</option>
+            {districtOptions.map((d) => (
+              <option key={d} value={d}>
+                {t(d)}
+              </option>
+            ))}
+          </select>
+          {errors.address?.district && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.address.district.message}
+            </p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

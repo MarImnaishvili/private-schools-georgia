@@ -9,6 +9,7 @@
     "schoolCreated": "სკოლის შექმნა",
     "errorCreatingSchool": "სკოლის შექმნის შეცდომა",
     "name": "სკოლის სახელი",
+    "Name": "სკოლის სახელი",
     "address": "მისამართი",
     "phoneNumber1": "პირველი ტელეფონის ნომერი",
     "phoneNumber2": "მეორე ტელეფონის ნომერი",
@@ -38,7 +39,9 @@
     "addNewSchool": "ახალი სკოლის დამატება",
     "accredited": "აკრედიტირებულია",
     "notAccredited": "არ არის აკრედიტირებული",
-    "inProgress": "აკრედიტაციის პროცესშია"
+    "inProgress": "აკრედიტაციის პროცესშია",
+    "media": "ფოტო/ვიდეო",
+    "required": "აუცილებელია შევსება"
   },
   "infrastructure": {
     "title": "ინფრასტრუქტურა",
@@ -104,5 +107,22 @@
     "didube-chugureti": "დიდუბე-ჩუღურეთი",
     "dzveli-tbilisi": "ძველი-თბილისი",
     "tbilisis shemogareni": "თბილისის შემოგარენი"
+  },
+  "media": {
+    "Add New Media": "დაამატე ახალი ფოტო/ვიდეო",
+    "Save Media": "შენახვა",
+    "Media": "ფოტო/ვიდეო",
+    "Media URL": "ფოტო/ვიდეო URL",
+    "Photo": "ფოტო",
+    "Video": "ვიდეო",
+    "School": "სკოლის შესახებ",
+    "Primary": "დაწყებითი",
+    "Basic": "საბაზო",
+    "Secondary": "საშუალო",
+    "Remove": "წაშლა",
+    "Add Media Item": "ფოტოს/ვიდეოს დამატება",
+    "Media Items": "ფოტო/ვიდეო",
+    "Description": "აღწერა",
+    "Description (optional)": "აღწერა (სურვილისამებრ)"
   }
 }

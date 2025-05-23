@@ -22,6 +22,15 @@ export async function POST(req: Request) {
         director: body.director,
         publicRelationsManager: body.publicRelationsManager,
         parentRelationshipManager: body.parentRelationshipManager,
+        establishedYear: body.establishedYear,
+        accreditationStatus: body.accreditationStatus,
+        accreditationComment: body.accreditationComment,
+        graduationRate:
+          body.graduationRate !== "" ? parseFloat(body.graduationRate) : null,
+        averageNationalExamScore:
+          body.averageNationalExamScore !== ""
+            ? parseFloat(body.averageNationalExamScore)
+            : null,
         description: body.description,
         hasTutor: body.hasTutor,
         tutorDescription: body.tutorDescription,
@@ -36,7 +45,7 @@ export async function POST(req: Request) {
           create: {
             city: body.address.city,
             street: body.address.street,
-            zipCode: body.address.zipCode ? parseInt(body.address.zipCode) : 0,
+            zipCode: body.address.zipCode?.toString() || "",
             district: body.address.district,
           },
         },

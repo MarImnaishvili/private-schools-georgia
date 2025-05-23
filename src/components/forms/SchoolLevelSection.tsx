@@ -1,8 +1,23 @@
+//app/components/forms/SchoolLevelSection
 "use client";
 
 import React from "react";
 import { useTranslations } from "next-intl";
-import { SchoolLevelSectionProps } from "../../types/formData";
+import { UseFormRegister, FieldErrors, Path } from "react-hook-form";
+import { SchoolLevelKey, SchoolLevelFields } from "@/types/formData";
+import { SchoolFormData } from "@/schemas/schema";
+
+type Props = {
+  level: SchoolLevelKey;
+  register: UseFormRegister<SchoolFormData>;
+  errors: FieldErrors<SchoolFormData>;
+};
+
+// Helper to build safe nested paths
+const field = <T extends SchoolLevelKey, K extends keyof SchoolLevelFields>(
+  level: T,
+  key: K
+): Path<SchoolFormData> => `${level}.${key}` as Path<SchoolFormData>;
 
 const mealsOptions = [
   "no meals",
@@ -30,16 +45,13 @@ const sportsClubsOptions = [
   "gymnastics",
 ];
 
+// multiple choice for mandatorySportsClubs and then combine as onre text.
 const textbooksPriceOptions = [
   "included in the price",
   "not included in the price",
 ];
 
-export default function SchoolLevelSection({
-  level,
-  data,
-  onChange,
-}: SchoolLevelSectionProps) {
+export default function SchoolLevelSection({ level, register, errors }: Props) {
   const t = useTranslations("level");
 
   return (
@@ -47,32 +59,36 @@ export default function SchoolLevelSection({
       <input
         type="number"
         placeholder={t("price")}
-        value={data.price}
-        onChange={(e) => onChange(level, "price", +e.target.value)}
+        {...register(field(level, "price"))}
         className="w-full border p-2"
       />
+      {errors?.[level]?.price && (
+        <p className="text-red-500 text-sm">{t("required")}</p>
+      )}
+
       <input
         placeholder={t("discountAndPaymentTerms")}
-        value={data.discountAndPaymentTerms}
-        onChange={(e) =>
-          onChange(level, "discountAndPaymentTerms", e.target.value)
-        }
+        {...register(field(level, "discountAndPaymentTerms"))}
         className="w-full border p-2"
       />
+      {errors?.[level]?.discountAndPaymentTerms && (
+        <p className="text-red-500 text-sm">{t("required")}</p>
+      )}
+
       <input
         type="number"
         placeholder={t("numberOfStudents")}
-        value={data.numberOfStudents}
-        onChange={(e) => onChange(level, "numberOfStudents", +e.target.value)}
+        {...register(field(level, "numberOfStudents"))}
         className="w-full border p-2"
       />
+      {errors?.[level]?.numberOfStudents && (
+        <p className="text-red-500 text-sm">{t("required")}</p>
+      )}
 
-      {/* Meals Dropdown */}
       <label className="block">
         {t("meals")}
         <select
-          value={data.meals}
-          onChange={(e) => onChange(level, "meals", e.target.value)}
+          {...register(field(level, "meals"))}
           className="w-full border p-2"
         >
           {mealsOptions.map((option) => (
@@ -83,12 +99,10 @@ export default function SchoolLevelSection({
         </select>
       </label>
 
-      {/* Transportation Dropdown */}
       <label className="block">
         {t("transportation")}
         <select
-          value={data.transportation}
-          onChange={(e) => onChange(level, "transportation", e.target.value)}
+          {...register(field(level, "transportation"))}
           className="w-full border p-2"
         >
           {transportationOptions.map((option) => (
@@ -100,26 +114,20 @@ export default function SchoolLevelSection({
       </label>
 
       <label className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          checked={data.schoolUniform}
-          onChange={(e) => onChange(level, "schoolUniform", e.target.checked)}
-        />
+        <input type="checkbox" {...register(field(level, "schoolUniform"))} />
         <span>{t("schoolUniform")}</span>
       </label>
 
       <input
         placeholder={t("teachingStyleBooks")}
-        value={data.teachingStyleBooks}
-        onChange={(e) => onChange(level, "teachingStyleBooks", e.target.value)}
+        {...register(field(level, "teachingStyleBooks"))}
         className="w-full border p-2"
       />
 
       <label className="block">
         {t("textbooksPrice")}
         <select
-          value={data.textbooksPrice}
-          onChange={(e) => onChange(level, "textbooksPrice", e.target.value)}
+          {...register(field(level, "textbooksPrice"))}
           className="w-full border p-2"
         >
           {textbooksPriceOptions.map((option) => (
@@ -132,8 +140,7 @@ export default function SchoolLevelSection({
 
       <input
         placeholder={t("clubsAndCircles")}
-        value={data.clubsAndCircles}
-        onChange={(e) => onChange(level, "clubsAndCircles", e.target.value)}
+        {...register(field(level, "clubsAndCircles"))}
         className="w-full border p-2"
       />
 
@@ -141,13 +148,7 @@ export default function SchoolLevelSection({
         {t("mandatorySportsClubs")}
         <select
           multiple
-          value={data.mandatorySportsClubs || []}
-          onChange={(e) => {
-            const selected = Array.from(e.target.selectedOptions).map(
-              (opt) => opt.value
-            );
-            onChange(level, "mandatorySportsClubs", selected);
-          }}
+          {...register(field(level, "mandatorySportsClubs"))}
           className="w-full border p-2 h-32"
         >
           {sportsClubsOptions.map((option) => (

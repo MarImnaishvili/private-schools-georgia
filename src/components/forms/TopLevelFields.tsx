@@ -1,62 +1,74 @@
+//app/components/forms/TopLevelFields
+"use client";
+
 import React from "react";
 import { useTranslations } from "next-intl";
-import { TopLevelFieldsProps } from "@/types/formData";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { SchoolFormData } from "@/schemas/schema";
 
-//const acreditationStatusOptions = ["accredited", "notAccredited", "inProgress"]; //
+type Props = {
+  register: UseFormRegister<SchoolFormData>;
+  errors: FieldErrors<SchoolFormData>;
+};
 
-export default function TopLevelFields({
-  formData,
-  onChange,
-}: TopLevelFieldsProps) {
+const fields: (keyof SchoolFormData)[] = [
+  "name",
+  "phoneNumber1",
+  "phoneNumber2",
+  "phoneNumber3",
+  "schoolsWebSite",
+  "facebookProfileURL",
+  "instagramProfileURL",
+  "establishedYear",
+  "accreditationStatus",
+  "accreditationComment",
+  "founder",
+  "director",
+  "publicRelationsManager",
+  "parentRelationshipManager",
+  "graduationRate",
+  "averageNationalExamScore",
+];
+
+export default function TopLevelFields({ register, errors }: Props) {
   const tForm = useTranslations("form");
-
-  const fields = [
-    "name",
-    "phoneNumber1",
-    "phoneNumber2",
-    "phoneNumber3",
-    "schoolsWebSite",
-    "facebookProfileURL",
-    "instagramProfileURL",
-    "establishedYear", //დაემატა
-    "accreditationStatus", //დაემატა
-    "accreditationComment", // authorizationDate,accreditationAgency, accreditationValidUntil
-    "founder",
-    "director",
-    "publicRelationsManager",
-    "parentRelationshipManager",
-    "graduationRate", //დაემატა
-    "averageNationalExamScore", //დაემატა
-  ];
 
   return (
     <>
       {fields.map((field) => (
-        <input
-          key={field}
-          name={field}
-          placeholder={tForm(field)}
-          value={formData[field] || ""}
-          onChange={onChange}
-          className="w-full border p-2"
-        />
+        <div key={field}>
+          <input
+            {...register(field)}
+            placeholder={tForm(field)}
+            className="w-full border p-2"
+          />
+          {errors?.[field] && (
+            <p className="text-red-500 text-sm">{tForm("required")}</p>
+          )}
+        </div>
       ))}
 
-      <textarea
-        name="description"
-        placeholder={tForm("description")}
-        value={formData.description || ""}
-        onChange={onChange}
-        className="w-full border p-2"
-      />
+      <div>
+        <textarea
+          {...register("description")}
+          placeholder={tForm("description")}
+          className="w-full border p-2"
+        />
+        {errors?.description && (
+          <p className="text-red-500 text-sm">{tForm("required")}</p>
+        )}
+      </div>
 
-      <textarea
-        name="otherPrograms"
-        placeholder={tForm("otherPrograms")}
-        value={formData.otherPrograms || ""}
-        onChange={onChange}
-        className="w-full border p-2"
-      />
+      <div>
+        <textarea
+          {...register("otherPrograms")}
+          placeholder={tForm("otherPrograms")}
+          className="w-full border p-2"
+        />
+        {errors?.otherPrograms && (
+          <p className="text-red-500 text-sm">{tForm("required")}</p>
+        )}
+      </div>
     </>
   );
 }

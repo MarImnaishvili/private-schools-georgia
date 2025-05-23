@@ -1,7 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "tailwindcss/preflight";
+@import "tailwindcss/components"; /* optional, if you want */
+@import "tailwindcss/utilities";
+@import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -119,4 +123,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
+} */

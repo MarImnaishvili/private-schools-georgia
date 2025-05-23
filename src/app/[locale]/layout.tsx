@@ -1,5 +1,6 @@
 // src/app/[locale]/layout.tsx
 import { NextIntlClientProvider } from "next-intl";
+import "../globals.css";
 
 type Props = {
   children: React.ReactNode;

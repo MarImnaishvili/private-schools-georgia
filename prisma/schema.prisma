@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -11,9 +11,9 @@ model SchoolData {
   id                        Int             @id @default(autoincrement())
   name                      String
   addressId                 Int
-  phoneNumber1              BigInt?
-  phoneNumber2              BigInt?
-  phoneNumber3              BigInt?
+  phoneNumber1              String?
+  phoneNumber2              String?
+  phoneNumber3              String?
   schoolsWebSite            String?
   facebookProfileURL        String?
   instagramProfileURL       String?
@@ -39,31 +39,36 @@ model SchoolData {
   createdBy                 DateTime?
   updatedAt                 DateTime        @updatedAt
   updatedBy                 DateTime?
-  address                   Address         @relation(fields: [addressId], references: [addressId])
-  basicLevel                BasicLevel?     @relation(fields: [basicLevelId], references: [basicLevelId])
-  infrastructure            Infrastructure? @relation(fields: [infrastructureId], references: [infrastructureId])
-  primaryLevel              PrimaryLevel?   @relation(fields: [primaryLevelId], references: [primaryLevelId])
-  secondaryLevel            SecondaryLevel? @relation(fields: [secondaryLevelID], references: [secondaryLevelID])
+  establishedYear           Int?
+  accreditationStatus       String?
+  accreditationComment      String?
+  graduationRate            Float?          @db.Real
+  averageNationalExamScore  Float?          @db.Real
+  address                   Address         @relation(fields: [addressId], references: [id])
+  basicLevel                BasicLevel?     @relation(fields: [basicLevelId], references: [id])
+  infrastructure            Infrastructure? @relation(fields: [infrastructureId], references: [id])
+  primaryLevel              PrimaryLevel?   @relation(fields: [primaryLevelId], references: [id])
+  secondaryLevel            SecondaryLevel? @relation(fields: [secondaryLevelID], references: [id])
   media                     Media[]
 
-  @@index([addressId], map: "SchoolData_addressId_fkey")
-  @@index([basicLevelId], map: "SchoolData_basicLevelId_fkey")
-  @@index([infrastructureId], map: "SchoolData_infrastructureId_fkey")
-  @@index([primaryLevelId], map: "SchoolData_primaryLevelId_fkey")
-  @@index([secondaryLevelID], map: "SchoolData_secondaryLevelID_fkey")
+  @@index([addressId])
+  @@index([basicLevelId])
+  @@index([infrastructureId])
+  @@index([primaryLevelId])
+  @@index([secondaryLevelID])
 }
 
 model Address {
-  addressId Int          @id @default(autoincrement())
-  city      String
-  district  String
-  street    String
-  zipCode   Int
-  schools   SchoolData[]
+  id       Int          @id @default(autoincrement())
+  city     String
+  district String
+  street   String
+  zipCode  String
+  schools  SchoolData[]
 }
 
 model Infrastructure {
-  infrastructureId       Int          @id @default(autoincrement())
+  id                     Int          @id @default(autoincrement())
   buildings_has          Boolean      @default(false)
   buildings_comment      String?
   numberOfFloors_has     Int?
@@ -86,7 +91,7 @@ model Infrastructure {
 }
 
 model PrimaryLevel {
-  primaryLevelId            Int          @id @default(autoincrement())
+  id                        Int          @id @default(autoincrement())
   price                     Decimal
   duration                  String
   discountAndPaymentTerms   String?
@@ -108,7 +113,7 @@ model PrimaryLevel {
 }
 
 model BasicLevel {
-  basicLevelId              Int          @id @default(autoincrement())
+  id                        Int          @id @default(autoincrement())
   price                     Decimal
   duration                  String
   discountAndPaymentTerms   String?
@@ -130,7 +135,7 @@ model BasicLevel {
 }
 
 model SecondaryLevel {
-  secondaryLevelID          Int          @id @default(autoincrement())
+  id                        Int          @id @default(autoincrement())
   price                     Decimal
   duration                  String
   discountAndPaymentTerms   String?
@@ -153,28 +158,36 @@ model SecondaryLevel {
 
 model Media {
   id               Int             @id @default(autoincrement())
-  mediaUrl         String          @map("media_url") @db.Text
-  type             MediaType
-  description      String?         @db.Text
+  mediaUrl         String          @map("media_url")
+  description      String?
   schoolId         Int?            @map("school_id")
   basicLevelId     Int?            @map("basic_level_id")
   primaryLevelId   Int?            @map("primary_level_id")
   secondaryLevelId Int?            @map("secondary_level_id")
-  createdAt        DateTime?       @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt        DateTime?       @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
-  school           SchoolData?     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_1")
-  basicLevel       BasicLevel?     @relation(fields: [basicLevelId], references: [basicLevelId], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_2")
-  primaryLevel     PrimaryLevel?   @relation(fields: [primaryLevelId], references: [primaryLevelId], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_3")
-  secondaryLevel   SecondaryLevel? @relation(fields: [secondaryLevelId], references: [secondaryLevelID], onDelete: Cascade, onUpdate: NoAction, map: "media_ibfk_4")
+  createdAt        DateTime?       @default(now()) @map("created_at")
+  updatedAt        DateTime?       @default(now()) @updatedAt @map("updated_at")
+  type             MediaType
+  attachedTo       MediaAttachment
+  basicLevel       BasicLevel?     @relation(fields: [basicLevelId], references: [id])
+  primaryLevel     PrimaryLevel?   @relation(fields: [primaryLevelId], references: [id])
+  school           SchoolData?     @relation(fields: [schoolId], references: [id])
+  secondaryLevel   SecondaryLevel? @relation(fields: [secondaryLevelId], references: [id])
 
-  @@index([basicLevelId], map: "basic_level_id")
-  @@index([primaryLevelId], map: "primary_level_id")
-  @@index([schoolId], map: "school_id")
-  @@index([secondaryLevelId], map: "secondary_level_id")
+  @@index([schoolId])
+  @@index([basicLevelId])
+  @@index([primaryLevelId])
+  @@index([secondaryLevelId])
   @@map("media")
 }
 
 enum MediaType {
   photo
   video
+}
+
+enum MediaAttachment {
+  school
+  primary
+  basic
+  secondary
 }
