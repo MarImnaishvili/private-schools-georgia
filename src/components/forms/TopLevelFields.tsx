@@ -5,6 +5,7 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { SchoolFormData } from "@/schemas/schema";
+import { Label } from "../ui/Label";
 
 type Props = {
   register: UseFormRegister<SchoolFormData>;
@@ -36,8 +37,11 @@ export default function TopLevelFields({ register, errors }: Props) {
   return (
     <>
       {fields.map((field) => (
-        <div key={field}>
+        <div key={field} className="flex flex-col gap-1">
+          <Label htmlFor={`levels.${field}`}>{tForm(field)}</Label>
+
           <input
+            id={tForm(field)}
             {...register(field)}
             placeholder={tForm(field)}
             className="w-full border p-2"
@@ -49,7 +53,9 @@ export default function TopLevelFields({ register, errors }: Props) {
       ))}
 
       <div>
+        <Label htmlFor="description">{tForm("description")}</Label>
         <textarea
+          id="description"
           {...register("description")}
           placeholder={tForm("description")}
           className="w-full border p-2"
@@ -60,7 +66,9 @@ export default function TopLevelFields({ register, errors }: Props) {
       </div>
 
       <div>
+        <Label htmlFor="otherPrograms">{tForm("otherPrograms")}</Label>
         <textarea
+          id="otherPrograms"
           {...register("otherPrograms")}
           placeholder={tForm("otherPrograms")}
           className="w-full border p-2"

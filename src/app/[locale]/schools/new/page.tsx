@@ -32,6 +32,7 @@ export default function NewSchoolPage() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<SchoolFormData>({
     resolver: zodResolver(schoolSchema),
@@ -111,6 +112,7 @@ export default function NewSchoolPage() {
               level="primary"
               register={register}
               errors={errors}
+              control={control}
             />
           </TabsContent>
           <TabsContent value="basic">
@@ -118,6 +120,7 @@ export default function NewSchoolPage() {
               level="basic"
               register={register}
               errors={errors}
+              control={control}
             />
           </TabsContent>
           <TabsContent value="secondary">
@@ -125,6 +128,7 @@ export default function NewSchoolPage() {
               level="secondary"
               register={register}
               errors={errors}
+              control={control}
             />
           </TabsContent>
         </Tabs>
