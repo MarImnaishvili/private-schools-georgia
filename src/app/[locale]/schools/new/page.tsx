@@ -14,6 +14,7 @@ import { schoolSchema, SchoolFormData } from "@/schemas/schema";
 const defaultschoolLevel = {
   price: 0,
   discountAndPaymentTerms: "",
+  duration: "",
   numberOfStudents: 0,
   meals: "",
   mealsDescription: "",
@@ -23,7 +24,6 @@ const defaultschoolLevel = {
   teachingStyleBooks: "",
   textbooksPrice: "",
   clubsAndCircles: "",
-  duration: "",
 };
 
 export default function NewSchoolPage() {
@@ -45,14 +45,14 @@ export default function NewSchoolPage() {
       facebookProfileURL: "",
       instagramProfileURL: "",
       establishedYear: 1900,
-      accreditationStatus: "", //დაემატა sanaxavia
-      accreditationComment: "", // დაემატა
+      accreditationStatus: "",
+      accreditationComment: "",
       founder: "",
       director: "",
       publicRelationsManager: "",
       parentRelationshipManager: "",
-      graduationRate: "", //დაემატა
-      averageNationalExamScore: "", //დაემატა
+      graduationRate: "",
+      averageNationalExamScore: "",
       description: "",
       otherPrograms: "",
       hasTutor: false,

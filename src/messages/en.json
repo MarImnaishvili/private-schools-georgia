@@ -28,21 +28,22 @@
     "averageNationalExamScore": "average national exam score",
     "description": "Description",
     "otherPrograms": "Other Programs",
-    "tutor": "Has Tutor",
-    "tutorDescription": "Tutor Description",
-    "scholarshipsGrants": "Scholarships or Grants",
-    "scholarshipsGrantsDescription": "Scholarships or Grants Description",
-    "exchangePrograms": "Exchange Programs",
-    "exchangeProgramsDescription": "Exchange Programs Description",
-    "outdoorGarden": "Outdoor Garden",
-    "outdoorGardenDescription": "Outdoor Garden Description",
     "submit": "Submit School",
     "addNewSchool": "Add New School",
     "accredited": "accredited",
     "notAccredited": "not accredited",
     "inProgress": "in progress",
     "media": "photo/video",
-    "required": "required"
+    "required": "required",
+    "need to be number": "need to be number",
+    "hasTutor": "Has Tutor",
+    "tutorDescription": "Tutor Description",
+    "hasScholarshipsGrants": "Has Scholarships Grants",
+    "scholarshipsGrants": "Scholarships Grants Description",
+    "hasExchangePrograms": "Has Exchange Programs",
+    "exchangePrograms": "Exchange Programs Description",
+    "hasOutdoorGarden": "Has Outdoor Garden",
+    "outdoorGarden": "outdoorGarden Description"
   },
   "infrastructure": {
     "title": "Infrastructure",
@@ -55,7 +56,8 @@
     "laboratories": "Laboratories",
     "library": "Library",
     "computerLab": "Computer Lad",
-    "cafe": "Cafeteria"
+    "cafe": "Cafeteria",
+    "required": "required"
   },
   "level": {
     "title": "Primary School",
@@ -92,7 +94,9 @@
     "judo": "judo",
     "yoga": "yoga",
     "gymnastics": "gymnastics",
-    "description": "description"
+    "description": "description",
+    "Select sports clubs": "Select mandatory sports clubs",
+    "required": "required"
   },
 
   "address": {
@@ -107,7 +111,8 @@
     "gldani-nadzaladevi": "gldani-nadzaladevi",
     "didube-chugureti": "didube-chugureti",
     "dzveli-tbilisi": "dzveli-tbilisi",
-    "tbilisis shemogareni": "tbilisis shemogareni"
+    "tbilisis shemogareni": "tbilisis shemogareni",
+    "required": "required"
   },
   "media": {
     "Add New Media": "Add new photo/video",
@@ -124,6 +129,7 @@
     "Add Media Item": "Add photo/video",
     "Media Items": "photo/video Items",
     "Description": "Description",
-    "Description (optional)": "Description (optional)"
+    "Description (optional)": "Description (optional)",
+    "required": "required"
   }
 }

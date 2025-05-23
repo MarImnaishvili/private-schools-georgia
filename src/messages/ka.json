@@ -26,22 +26,24 @@
     "parentRelationshipManager": "მშობლებთან ურთიერთობის მენეჯერი",
     "graduationRate": "სკოლის დამთავრების%",
     "averageNationalExamScore": "ეროვნული გამოცდების საშუალო ქულა",
-    "description": "აღწერა",
+    "description": "კომენტარი",
     "otherPrograms": "სხვა პროგრამები",
-    "tutor": "მასწავლებელი",
-    "scholarshipsGrants": "სტიპენდიები ან გრანტები",
-    "scholarshipsGrantsDescription": "სტიპენდიების და გრანტების აღწერა",
-    "exchangePrograms": "გაცვლითი პროგრამები",
-    "exchangeProgramsDescription": "გაცვლითი პროგრამების აღწერა",
-    "outdoorGarden": "გარე ბაღი",
-    "outdoorGardenDescription": "გარე ბაღის აღწერა",
+    "hasTutor": "ყავს ტუტორი",
+    "tutorDescription": "ტუტორის კომენტარი",
+    "hasScholarshipsGrants": "სტიპენდიები/გრანტები",
+    "scholarshipsGrants": "სტიპენდიების და გრანტების კომენტარი",
+    "hasExchangePrograms": "გაცვლითი პროგრამები",
+    "exchangePrograms": "გაცვლითი პროგრამების კომენტარი",
+    "hasOutdoorGarden": "გარე ბაღი",
+    "outdoorGarden": "გარე ბაღის კომენტარი",
     "submit": "სკოლის დამატება",
     "addNewSchool": "ახალი სკოლის დამატება",
     "accredited": "აკრედიტირებულია",
     "notAccredited": "არ არის აკრედიტირებული",
     "inProgress": "აკრედიტაციის პროცესშია",
     "media": "ფოტო/ვიდეო",
-    "required": "აუცილებელია შევსება"
+    "required": "აუცილებელია შევსება",
+    "need to be number": "უნდა იყოს რიცხვი"
   },
   "infrastructure": {
     "title": "ინფრასტრუქტურა",
@@ -54,7 +56,8 @@
     "laboratories": "ლაბორატორიები",
     "library": "ბიბლიოთეკა",
     "computerLab": "კომპიუტერული ლაბორატორია",
-    "cafe": "კაფეტერია"
+    "cafe": "კაფეტერია",
+    "required": "აუცილებელია შევსება"
   },
   "level": {
     "title": "დაწყებითი საფეხური",
@@ -63,12 +66,12 @@
     "duration": "ხანგრძლივობა",
     "numberOfStudents": "მოსწავლეთა რაოდენობა",
     "meals": "კვება",
-    "mealsDescription": "კვების აღწერა",
+    "mealsDescription": "კვების კომენტარი",
     "mealsIncludedInThePrice": "შეიცავს კვებას",
     "transportation": "ტრანსპორტი",
-    "transportationDescription": "ტრანსპორტის აღწერა",
+    "transportationDescription": "ტრანსპორტის კომენტარი",
     "schoolUniform": "სკოლის ფორმა",
-    "schoolUniformDescription": "სკოლის ფორმის აღწერა",
+    "schoolUniformDescription": "სკოლის ფორმის კომენტარი",
     "mandatorySportsClubs": "სავალდებულო სპორტული კლუბები",
     "optionalSportsClubs": "უფლებამოსილი სპორტული კლუბები",
     "foreignLanguages": "უცხო ენები",
@@ -91,7 +94,9 @@
     "judo": "ძიუდო",
     "yoga": "იოგა",
     "gymnastics": "ტანვარჯიში",
-    "description": "აღწერილობა"
+    "description": "აღწერილობა",
+    "Select sports clubs": "აირჩიე სავალდებულო სპორტული წრეები",
+    "required": "აუცილებელია შევსება"
   },
 
   "address": {
@@ -106,7 +111,8 @@
     "gldani-nadzaladevi": "გლდანი-ნაძალადევი",
     "didube-chugureti": "დიდუბე-ჩუღურეთი",
     "dzveli-tbilisi": "ძველი-თბილისი",
-    "tbilisis shemogareni": "თბილისის შემოგარენი"
+    "tbilisis shemogareni": "თბილისის შემოგარენი",
+    "required": "აუცილებელია შევსება"
   },
   "media": {
     "Add New Media": "დაამატე ახალი ფოტო/ვიდეო",
@@ -122,7 +128,8 @@
     "Remove": "წაშლა",
     "Add Media Item": "ფოტოს/ვიდეოს დამატება",
     "Media Items": "ფოტო/ვიდეო",
-    "Description": "აღწერა",
-    "Description (optional)": "აღწერა (სურვილისამებრ)"
+    "Description": "კომენტარი",
+    "Description (optional)": "კომენტარი (სურვილისამებრ)",
+    "required": "აუცილებელია შევსება"
   }
 }

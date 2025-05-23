@@ -1,7 +1,7 @@
 //app/components/forms/SchoolLevelSection
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   UseFormRegister,
@@ -66,7 +66,25 @@ export default function SchoolLevelSection({
   errors,
   control,
 }: Props) {
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState(false);
   const t = useTranslations("level");
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Card className="p-4 mb-6">
@@ -77,7 +95,7 @@ export default function SchoolLevelSection({
             id={`levels.${level}.price`}
             type="number"
             placeholder={t("price")}
-            {...register(field(level, "price"))}
+            {...register(field(level, "price"), { valueAsNumber: true })}
             className="w-full border p-2"
           />
           {errors?.[level]?.price && (
@@ -100,6 +118,18 @@ export default function SchoolLevelSection({
           )}
         </div>
         <div>
+          <Label htmlFor={`levels.${level}.duration`}>{t("duration")}</Label>
+          <input
+            id={`levels.${level}.duration`}
+            placeholder={t("duration")}
+            {...register(field(level, "duration"))}
+            className="w-full border p-2"
+          />
+          {errors?.[level]?.duration && (
+            <p className="text-red-500 text-sm">{t("required")}</p>
+          )}
+        </div>
+        <div>
           <Label htmlFor={`levels.${level}.numberOfStudents`}>
             {t("numberOfStudents")}
           </Label>
@@ -108,7 +138,9 @@ export default function SchoolLevelSection({
             id={`levels.${level}.numberOfStudents`}
             type="number"
             placeholder={t("numberOfStudents")}
-            {...register(field(level, "numberOfStudents"))}
+            {...register(field(level, "numberOfStudents"), {
+              valueAsNumber: true,
+            })}
             className="w-full border p-2"
           />
           {errors?.[level]?.numberOfStudents && (
@@ -130,6 +162,21 @@ export default function SchoolLevelSection({
               ))}
             </select>
           </label>
+        </div>
+
+        <div>
+          <Label htmlFor={`levels.${level}.mealsDescription`}>
+            {t("mealsDescription")}
+          </Label>
+          <input
+            id={`levels.${level}.mealsDescription`}
+            placeholder={t("mealsDescription")}
+            {...register(field(level, "mealsDescription"))}
+            className="w-full border p-2"
+          />
+          {errors?.[level]?.mealsDescription && (
+            <p className="text-red-500 text-sm">{t("required")}</p>
+          )}
         </div>
 
         <div>
@@ -198,25 +245,52 @@ export default function SchoolLevelSection({
           <Controller
             name={field(level, "mandatorySportsClubs")}
             control={control}
-            render={({ field }) => (
-              <select
-                multiple
-                className="w-full border p-2 h-32"
-                value={Array.isArray(field.value) ? field.value : []}
-                onChange={(e) => {
-                  const selected = Array.from(e.target.selectedOptions).map(
-                    (opt) => opt.value
-                  );
-                  field.onChange(selected);
-                }}
-              >
-                {sportsClubsOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {t(`${option}`)}
-                  </option>
-                ))}
-              </select>
-            )}
+            defaultValue=""
+            render={({ field }) => {
+              const selectedValues = field.value
+                ? field.value.toString().split(",")
+                : [];
+
+              const toggleValue = (value: string) => {
+                const newValues = selectedValues.includes(value)
+                  ? selectedValues.filter((v: string) => v !== value)
+                  : [...selectedValues, value];
+                field.onChange(newValues.join(","));
+              };
+
+              return (
+                <div className="relative inline-block w-full" ref={dropdownRef}>
+                  {/* Trigger */}
+                  <div
+                    onClick={() => setOpen((prev) => !prev)}
+                    className="w-full border p-2 rounded cursor-pointer bg-white"
+                  >
+                    {selectedValues.length > 0
+                      ? selectedValues.map((v: string) => t(v)).join(", ")
+                      : t("Select sports clubs")}
+                  </div>
+
+                  {/* Dropdown */}
+                  {open && (
+                    <div className="absolute z-10 mt-2 w-full border rounded bg-white shadow-md p-2 max-h-48 overflow-auto">
+                      {sportsClubsOptions.map((option) => (
+                        <label
+                          key={option}
+                          className="flex items-center space-x-2 py-1"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedValues.includes(option)}
+                            onChange={() => toggleValue(option)}
+                          />
+                          <span>{t(option)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }}
           />
         </div>
       </CardContent>
