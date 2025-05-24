@@ -33,6 +33,7 @@ export default function NewSchoolPage() {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<SchoolFormData>({
     resolver: zodResolver(schoolSchema),
@@ -88,7 +89,12 @@ export default function NewSchoolPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    alert(response.ok ? tForm("schoolCreated") : tForm("errorCreatingSchool"));
+    if (response.ok) {
+      alert(tForm("schoolCreated"));
+      reset(); // <-- reset the form to default values
+    } else {
+      alert(tForm("errorCreatingSchool"));
+    }
   };
 
   return (
