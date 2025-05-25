@@ -1,7 +1,7 @@
 //i18n.ts
 const i18nConfig = {
-  locales: ["en", "ka"],
-  defaultLocale: "en",
+  defaultLocale: "ka",
+  locales: ["ka", "en"],
 };
 
 export default i18nConfig;

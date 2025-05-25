@@ -17,7 +17,7 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div>
+    <div className="w-15 flex justify-between">
       <button onClick={() => switchLocale("en")} disabled={locale === "en"}>
         EN
       </button>

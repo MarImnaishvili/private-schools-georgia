@@ -1,4 +1,9 @@
 {
+  "General": {
+    "Georgian Private Schools": "Private Schools",
+    "Home": "Home",
+    "Create school": "Create school"
+  },
   "form": {
     "infrastructure": "Infrastructure",
     "schoolLevels": "School Levels",

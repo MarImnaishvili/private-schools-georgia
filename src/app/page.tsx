@@ -1,10 +1,6 @@
 // app/page.tsx
-import SchoolTable from "@/components/SchoolTable";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <div>
-      <SchoolTable />
-    </div>
-  );
+export default function RootRedirect() {
+  redirect("/ka"); // or "/en" as your default
 }

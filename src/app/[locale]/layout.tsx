@@ -1,5 +1,6 @@
-// src/app/[locale]/layout.tsx
 import { NextIntlClientProvider } from "next-intl";
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 import "../globals.css";
 
 type Props = {
@@ -7,15 +8,18 @@ type Props = {
   params: { locale: string };
 };
 
-export default async function LocaleLayout({ children, params }: Props) {
-  const { locale } = await Promise.resolve(params);
-
-  // Ensure you await if params is asynchronous
-  const messages = (await import(`@/messages/${locale}.json`)).default;
+export default async function LocaleLayout(props: Props) {
+  const { children } = props;
+  const { locale } = await Promise.resolve(props.params);
+  const messages = (await import(`../../messages/${locale}.json`)).default;
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <Sidebar />
+        <main className="flex-1 p-4">{children}</main>
+      </div>
     </NextIntlClientProvider>
   );
 }

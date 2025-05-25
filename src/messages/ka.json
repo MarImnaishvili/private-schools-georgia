@@ -1,4 +1,9 @@
 {
+  "General": {
+    "Georgian Private Schools": "კერძო სკოლები",
+    "Home": "მთავარი",
+    "Create school": "სკოლის დამატება"
+  },
   "form": {
     "infrastructure": "ინფრასტრუქტურა",
     "schoolLevels": "სკოლის საფეხურები",

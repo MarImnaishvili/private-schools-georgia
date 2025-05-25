@@ -2,27 +2,27 @@
 
 import React from "react";
 import Link from "next/link";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 export default function Sidebar() {
+  const tG = useTranslations("General");
   return (
-    <aside className="w-30 h-full bg-gray-100 shadow-md p-4">
-      <nav className="space-y-4">
-        <Link href="/" className="block text-gray-700 hover:text-blue-600">
-          Home
-        </Link>
-        <Link
-          href="/ka/schools/new"
-          className="block text-gray-700 hover:text-blue-600"
-        >
-          Create new school
-        </Link>
-        <Link
-          href="/settings"
-          className="block text-gray-700 hover:text-blue-600"
-        >
-          Schools
-        </Link>
+    <>
+      <nav className="bg-gray-200 p-4 shadow-md flex gap-6 justify-between">
+        <div className="w-[80%] flex gap-6">
+          <Link href="/" className="text-gray-700 hover:text-blue-600">
+            {tG("Home")}
+          </Link>
+          <Link
+            href="/ka/schools/new"
+            className="text-gray-700 hover:text-blue-600"
+          >
+            {tG("Create school")}
+          </Link>
+        </div>
+        <LanguageSwitcher />
       </nav>
-    </aside>
+    </>
   );
 }
