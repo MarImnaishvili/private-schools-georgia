@@ -24,7 +24,7 @@ interface School {
 
 export default function SchoolsGrid() {
   const tForm = useTranslations("form");
-  const [rowData, setRowData] = useState([]);
+  const [rowData, setRowData] = useState<School[]>([]);
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [mode, setMode] = useState<"view" | "edit">("view");
@@ -59,10 +59,29 @@ export default function SchoolsGrid() {
         <div style={{ display: "flex", gap: "8px" }}>
           <button onClick={() => openModal(params.data, "view")}>View</button>
           <button onClick={() => openModal(params.data, "edit")}>Edit</button>
+          <button
+            onClick={() => handleDelete(params.data)}
+            style={{ color: "red" }}
+          >
+            Delete
+          </button>
         </div>
       ),
     },
   ];
+
+  const handleDelete = async (school: School) => {
+    if (!window.confirm(`Are you sure you want to delete ${school.name}?`))
+      return;
+
+    try {
+      await fetch(`/api/schools/${school.id}`, { method: "DELETE" });
+      setRowData((prev: School[]) => prev.filter((s) => s.id !== school.id));
+    } catch (error) {
+      console.error("Failed to delete school", error);
+      alert("Failed to delete school");
+    }
+  };
 
   const openModal = (schoolData: any, mode: "view" | "edit") => {
     setSelectedSchool(schoolData);
