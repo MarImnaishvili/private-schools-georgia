@@ -1,12 +1,12 @@
 // app/[locale]/page.tsx
 
-import SchoolTable from "@/components/SchoolTable";
+import SchoolDataGrid from "@/components/SchoolDataGrid";
 
 export default function HomePage() {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold">
-        <SchoolTable />
+        <SchoolDataGrid />
       </h1>
     </div>
   );

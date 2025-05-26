@@ -20,6 +20,7 @@ const schoolLevelSchema = z.object({
 
 // Main schema
 export const schoolSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1).optional(),
   phoneNumber1: z.string().min(1).optional(),
   phoneNumber2: z.string().optional(),

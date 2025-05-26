@@ -20,9 +20,10 @@ const districtOptions = [
 type Props = {
   register: UseFormRegister<SchoolFormData>;
   errors: FieldErrors<SchoolFormData>;
+  disabled?: boolean;
 };
 
-export default function AddressSection({ register, errors }: Props) {
+export default function AddressSection({ register, errors, disabled }: Props) {
   const t = useTranslations("address");
 
   return (
@@ -37,6 +38,7 @@ export default function AddressSection({ register, errors }: Props) {
             placeholder={t("city")}
             {...register("address.city")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors.address?.city && (
             <p className="text-red-500 text-sm mt-1">
@@ -52,6 +54,7 @@ export default function AddressSection({ register, errors }: Props) {
             placeholder={t("street")}
             {...register("address.street")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors.address?.street && (
             <p className="text-red-500 text-sm mt-1">
@@ -67,6 +70,7 @@ export default function AddressSection({ register, errors }: Props) {
             placeholder={t("zipCode")}
             {...register("address.zipCode")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors.address?.zipCode && (
             <p className="text-red-500 text-sm mt-1">
@@ -81,7 +85,9 @@ export default function AddressSection({ register, errors }: Props) {
             {...register("address.district")}
             className="w-full border p-2"
           >
-            <option value="">{t("selectDistrict")}</option>
+            <option disabled={disabled} value="">
+              {t("selectDistrict")}
+            </option>
             {districtOptions.map((d) => (
               <option key={d} value={d}>
                 {t(d)}

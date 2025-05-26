@@ -1,3 +1,4 @@
+//api/schools/[id]/route
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +9,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const schoolId = parseInt(params.id);
+    const schoolId = params.id;
     const body = await req.json();
 
     const updatedSchool = await prisma.schoolData.update({

@@ -20,6 +20,7 @@ type Props = {
   register: UseFormRegister<SchoolFormData>;
   errors: FieldErrors<SchoolFormData>;
   control: Control<SchoolFormData>;
+  disabled?: boolean;
 };
 
 // Helper to build safe nested paths
@@ -65,6 +66,7 @@ export default function SchoolLevelSection({
   register,
   errors,
   control,
+  disabled,
 }: Props) {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -97,6 +99,7 @@ export default function SchoolLevelSection({
             placeholder={t("price")}
             {...register(field(level, "price"), { valueAsNumber: true })}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.[level]?.price && (
             <p className="text-red-500 text-sm">{t("required")}</p>
@@ -112,6 +115,7 @@ export default function SchoolLevelSection({
             placeholder={t("discountAndPaymentTerms")}
             {...register(field(level, "discountAndPaymentTerms"))}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.[level]?.discountAndPaymentTerms && (
             <p className="text-red-500 text-sm">{t("required")}</p>
@@ -124,6 +128,7 @@ export default function SchoolLevelSection({
             placeholder={t("duration")}
             {...register(field(level, "duration"))}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.[level]?.duration && (
             <p className="text-red-500 text-sm">{t("required")}</p>
@@ -142,6 +147,7 @@ export default function SchoolLevelSection({
               valueAsNumber: true,
             })}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.[level]?.numberOfStudents && (
             <p className="text-red-500 text-sm">{t("required")}</p>
@@ -156,7 +162,7 @@ export default function SchoolLevelSection({
               className="w-full border p-2"
             >
               {mealsOptions.map((option) => (
-                <option key={option} value={option}>
+                <option disabled={disabled} key={option} value={option}>
                   {t(option)}
                 </option>
               ))}
@@ -173,6 +179,7 @@ export default function SchoolLevelSection({
             placeholder={t("mealsDescription")}
             {...register(field(level, "mealsDescription"))}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.[level]?.mealsDescription && (
             <p className="text-red-500 text-sm">{t("required")}</p>
@@ -187,7 +194,7 @@ export default function SchoolLevelSection({
               className="w-full border p-2"
             >
               {transportationOptions.map((option) => (
-                <option key={option} value={option}>
+                <option disabled={disabled} key={option} value={option}>
                   {t(option)}
                 </option>
               ))}
@@ -198,6 +205,7 @@ export default function SchoolLevelSection({
           <label className="flex items-center space-x-2">
             {t("schoolUniform")}
             <input
+              disabled={disabled}
               type="checkbox"
               {...register(field(level, "schoolUniform"))}
             />
@@ -212,6 +220,7 @@ export default function SchoolLevelSection({
             placeholder={t("teachingStyleBooks")}
             {...register(field(level, "teachingStyleBooks"))}
             className="w-full border p-2"
+            disabled={disabled}
           />
         </div>
         <div>
@@ -222,7 +231,7 @@ export default function SchoolLevelSection({
               className="w-full border p-2"
             >
               {textbooksPriceOptions.map((option) => (
-                <option key={option} value={option}>
+                <option disabled={disabled} key={option} value={option}>
                   {t(option)}
                 </option>
               ))}
@@ -239,6 +248,7 @@ export default function SchoolLevelSection({
             placeholder={t("clubsAndCircles")}
             {...register(field(level, "clubsAndCircles"))}
             className="w-full border p-2"
+            disabled={disabled}
           />
         </div>
         <div>
@@ -282,6 +292,7 @@ export default function SchoolLevelSection({
                             type="checkbox"
                             checked={selectedValues.includes(option)}
                             onChange={() => toggleValue(option)}
+                            disabled={disabled}
                           />
                           <span>{t(option)}</span>
                         </label>

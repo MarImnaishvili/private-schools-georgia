@@ -18,11 +18,19 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="w-15 flex justify-between">
-      <button onClick={() => switchLocale("en")} disabled={locale === "en"}>
+      <button
+        className=" hover:text-blue-600"
+        onClick={() => switchLocale("en")}
+        disabled={locale === "en"}
+      >
         EN
       </button>
-      <button onClick={() => switchLocale("ka")} disabled={locale === "ka"}>
-        KA
+      <button
+        className=" hover:text-blue-600"
+        onClick={() => switchLocale("ka")}
+        disabled={locale === "ka"}
+      >
+        ქა
       </button>
     </div>
   );

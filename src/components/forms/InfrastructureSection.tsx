@@ -10,9 +10,14 @@ import { Card, CardContent } from "../ui/Card";
 type Props = {
   register: UseFormRegister<SchoolFormData>;
   errors: FieldErrors<SchoolFormData>;
+  disabled?: boolean;
 };
 
-export default function InfrastructureSection({ register, errors }: Props) {
+export default function InfrastructureSection({
+  register,
+  errors,
+  disabled,
+}: Props) {
   const t = useTranslations("infrastructure");
 
   return (
@@ -30,6 +35,7 @@ export default function InfrastructureSection({ register, errors }: Props) {
                 valueAsNumber: true,
               })}
               className="w-full border p-2"
+              disabled={disabled}
             />
           </label>
           {errors.infrastructure?.numberOfFloors && (
@@ -48,6 +54,7 @@ export default function InfrastructureSection({ register, errors }: Props) {
                 valueAsNumber: true,
               })}
               className="w-full border p-2"
+              disabled={disabled}
             />
           </label>
           {errors.infrastructure?.squareness && (
@@ -64,6 +71,7 @@ export default function InfrastructureSection({ register, errors }: Props) {
               <input
                 type="checkbox"
                 {...register("infrastructure.buildings")}
+                disabled={disabled}
               />
               <span>{t("buildings")}</span>
             </label>
@@ -71,20 +79,29 @@ export default function InfrastructureSection({ register, errors }: Props) {
 
           <div className="flex flex-col gap-1">
             <label className="block space-x-2">
-              <input type="checkbox" {...register("infrastructure.stadiums")} />
+              <input
+                disabled={disabled}
+                type="checkbox"
+                {...register("infrastructure.stadiums")}
+              />
               <span>{t("stadiums")}</span>
             </label>
           </div>
 
           <div className="flex flex-col gap-1">
             <label className="block space-x-2">
-              <input type="checkbox" {...register("infrastructure.pools")} />
+              <input
+                disabled={disabled}
+                type="checkbox"
+                {...register("infrastructure.pools")}
+              />
               <span>{t("pools")}</span>
             </label>
           </div>
           <div className="flex flex-col gap-1">
             <label className="block space-x-2">
               <input
+                disabled={disabled}
                 type="checkbox"
                 {...register("infrastructure.courtyard")}
               />
@@ -94,6 +111,7 @@ export default function InfrastructureSection({ register, errors }: Props) {
           <div className="flex flex-col gap-1">
             <label className="block space-x-2">
               <input
+                disabled={disabled}
                 type="checkbox"
                 {...register("infrastructure.laboratories")}
               />
@@ -102,13 +120,21 @@ export default function InfrastructureSection({ register, errors }: Props) {
           </div>
           <div className="flex flex-col gap-1">
             <label className="block space-x-2">
-              <input type="checkbox" {...register("infrastructure.library")} />
+              <input
+                disabled={disabled}
+                type="checkbox"
+                {...register("infrastructure.library")}
+              />
               <span>{t("library")}</span>
             </label>
           </div>
           <div className="flex flex-col gap-1">
             <label className="block space-x-2">
-              <input type="checkbox" {...register("infrastructure.cafe")} />
+              <input
+                disabled={disabled}
+                type="checkbox"
+                {...register("infrastructure.cafe")}
+              />
               <span>{t("cafe")}</span>
             </label>
           </div>

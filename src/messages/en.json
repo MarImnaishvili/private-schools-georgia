@@ -5,6 +5,8 @@
     "Create school": "Create school"
   },
   "form": {
+    "id": "Id",
+    "actions": "Actions",
     "infrastructure": "Infrastructure",
     "schoolLevels": "School Levels",
     "otherFeatures": "Other Features",

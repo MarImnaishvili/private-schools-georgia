@@ -5,6 +5,8 @@
     "Create school": "სკოლის დამატება"
   },
   "form": {
+    "id": "#",
+    "actions": "ნახვა/კორექტირება",
     "infrastructure": "ინფრასტრუქტურა",
     "schoolLevels": "სკოლის საფეხურები",
     "otherFeatures": "სხვა მახასიათებლები",
