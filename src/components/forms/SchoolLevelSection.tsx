@@ -239,6 +239,19 @@ export default function SchoolLevelSection({
           </label>
         </div>
         <div>
+          <Label htmlFor={`levels.${level}.foreignLanguages`}>
+            {t("foreignLanguages")}
+          </Label>
+
+          <input
+            id={`levels.${level}.foreignLanguages`}
+            placeholder={t("foreignLanguages")}
+            {...register(field(level, "foreignLanguages"))}
+            className="w-full border p-2"
+            disabled={disabled}
+          />
+        </div>
+        <div>
           <Label htmlFor={`levels.${level}.clubsAndCircles`}>
             {t("clubsAndCircles")}
           </Label>

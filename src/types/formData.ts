@@ -32,6 +32,7 @@ export type SchoolLevelFields = {
   textbooksPrice: string;
   clubsAndCircles: string;
   duration: string;
+  foreignLanguages: string;
 };
 
 export type SchoolLevelKey = "primary" | "basic" | "secondary";

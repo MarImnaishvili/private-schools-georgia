@@ -22,9 +22,9 @@ model SchoolData {
   publicRelationsManager    String?
   parentRelationshipManager String?
   infrastructureId          Int?
-  primaryLevelId            Int?
-  basicLevelId              Int?
-  secondaryLevelID          Int?
+  primaryId                 Int?
+  basicId                   Int?
+  secondaryID               Int?
   otherPrograms             String?
   description               String?
   hasTutor                  Boolean               @default(false)
@@ -46,17 +46,17 @@ model SchoolData {
   averageNationalExamScore  Float?                @db.Real
   address                   Address               @relation(fields: [addressId], references: [id])
   infrastructure            Infrastructure?       @relation(fields: [infrastructureId], references: [id])
-  primaryLevel              PrimaryLevel?         @relation("PrimaryLevelToSchool")
-  basicLevel                BasicLevel?           @relation("BasicLevelToSchool")
-  secondaryLevel            SecondaryLevel?       @relation("SecondaryLevelToSchool")
+  primary              Primary?         @relation("PrimaryToSchool")
+  basic                Basic?           @relation("BasicToSchool")
+  secondary            Secondary?       @relation("SecondaryToSchool")
   media                     Media[]
   levelMandatorySports      LevelMandatorySport[]
 
   @@index([addressId])
-  @@index([basicLevelId])
+  @@index([basicId])
   @@index([infrastructureId])
-  @@index([primaryLevelId])
-  @@index([secondaryLevelID])
+  @@index([primaryId])
+  @@index([secondaryID])
 }
 
 model Address {
@@ -70,31 +70,22 @@ model Address {
 
 model Infrastructure {
   id                     Int          @id @default(autoincrement())
-  buildings_has          Boolean      @default(false)
-  buildings_comment      String?
-  numberOfFloors_has     Int?
-  numberOfFloors_comment String?
-  squareness_has         Int?
-  squareness_comment     String?
-  stadiums_has           Boolean      @default(false)
-  stadiums_comment       String?
-  pools_has              Boolean      @default(false)
-  pools_comment          String?
-  courtyard_has          Boolean      @default(false)
-  courtyard_comment      String?
-  laboratories_has       Boolean      @default(false)
-  laboratories_comment   String?
-  library_has            Boolean      @default(false)
-  library_comment        String?
-  cafe_has               Boolean      @default(false)
-  cafe_comment           String?
+  buildings              Boolean      @default(false)
+  numberOfFloors         Int?
+  squareness             Int?
+  stadiums               Boolean      @default(false)
+  pools                  Boolean      @default(false)
+  courtyard              Boolean      @default(false)
+  laboratories           Boolean      @default(false)
+  library                Boolean      @default(false)
+  cafe                   Boolean      @default(false)
   schools                SchoolData[]
 }
 
-model PrimaryLevel {
+model Primary {
   id                        Int        @id @default(autoincrement())
   schoolId                  String     @unique
-  school                    SchoolData @relation("PrimaryLevelToSchool", fields: [schoolId], references: [id])
+  school                    SchoolData @relation("PrimaryToSchool", fields: [schoolId], references: [id]) 
   price                     Decimal
   duration                  String
   discountAndPaymentTerms   String?
@@ -102,11 +93,8 @@ model PrimaryLevel {
   meals                     String?
   mealsDescription          String?
   transportation            String?
-  transportationDescription String?
   schoolUniform             Boolean    @default(false)
-  schoolUniformDescription  String?
   mandatorySportsClubs      String?
-  optionalSportsClubs       String?
   foreignLanguages          String?
   teachingStyleBooks        String?
   clubsAndCircles           String?
@@ -116,10 +104,10 @@ model PrimaryLevel {
   @@index([schoolId])
 }
 
-model BasicLevel {
+model Basic {
   id                        Int        @id @default(autoincrement())
   schoolId                  String     @unique
-  school                    SchoolData @relation("BasicLevelToSchool", fields: [schoolId], references: [id])
+  school                    SchoolData @relation("BasicToSchool", fields: [schoolId], references: [id]) 
   price                     Decimal
   duration                  String
   discountAndPaymentTerms   String?
@@ -127,11 +115,8 @@ model BasicLevel {
   meals                     String?
   mealsDescription          String?
   transportation            String?
-  transportationDescription String?
   schoolUniform             Boolean    @default(false)
-  schoolUniformDescription  String?
   mandatorySportsClubs      String?
-  optionalSportsClubs       String?
   foreignLanguages          String?
   teachingStyleBooks        String?
   clubsAndCircles           String?
@@ -141,10 +126,10 @@ model BasicLevel {
   @@index([schoolId])
 }
 
-model SecondaryLevel {
+model Secondary {
   id                        Int        @id @default(autoincrement())
   schoolId                  String     @unique
-  school                    SchoolData @relation("SecondaryLevelToSchool", fields: [schoolId], references: [id])
+  school                    SchoolData @relation("SecondaryToSchool", fields: [schoolId], references: [id]) 
   price                     Decimal
   duration                  String
   discountAndPaymentTerms   String?
@@ -152,11 +137,8 @@ model SecondaryLevel {
   meals                     String?
   mealsDescription          String?
   transportation            String?
-  transportationDescription String?
   schoolUniform             Boolean    @default(false)
-  schoolUniformDescription  String?
   mandatorySportsClubs      String?
-  optionalSportsClubs       String?
   foreignLanguages          String?
   teachingStyleBooks        String?
   clubsAndCircles           String?
@@ -171,22 +153,22 @@ model Media {
   mediaUrl         String          @map("media_url")
   description      String?
   schoolId         String?         @map("school_id")
-  basicLevelId     Int?            @map("basic_level_id")
-  primaryLevelId   Int?            @map("primary_level_id")
-  secondaryLevelId Int?            @map("secondary_level_id")
+  basicId          Int?            @map("basic_id")
+  primaryId        Int?            @map("primary_id")
+  secondaryId      Int?            @map("secondary_id")
   createdAt        DateTime?       @default(now()) @map("created_at")
   updatedAt        DateTime?       @default(now()) @updatedAt @map("updated_at")
   type             MediaType
   attachedTo       MediaAttachment
-  basicLevel       BasicLevel?     @relation(fields: [basicLevelId], references: [id])
-  primaryLevel     PrimaryLevel?   @relation(fields: [primaryLevelId], references: [id])
+  basic       Basic?     @relation(fields: [basicId], references: [id])
+  primary     Primary?   @relation(fields: [primaryId], references: [id])
   school           SchoolData?     @relation(fields: [schoolId], references: [id])
-  secondaryLevel   SecondaryLevel? @relation(fields: [secondaryLevelId], references: [id])
+  secondary   Secondary? @relation(fields: [secondaryId], references: [id])
 
   @@index([schoolId])
-  @@index([basicLevelId])
-  @@index([primaryLevelId])
-  @@index([secondaryLevelId])
+  @@index([basicId])
+  @@index([primaryId])
+  @@index([secondaryId])
   @@map("media")
 }
 

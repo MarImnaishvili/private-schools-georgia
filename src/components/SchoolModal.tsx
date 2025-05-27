@@ -2,32 +2,117 @@
 
 import { useForm, FormProvider } from "react-hook-form";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
-import AddressSection from "././forms/AddressSection";
-import InfrastructureSection from "././forms/InfrastructureSection";
-import SchoolLevelSection from "././forms/SchoolLevelSection";
+import { useEffect, useRef } from "react";
+import AddressSection from "./forms/AddressSection";
+import InfrastructureSection from "./forms/InfrastructureSection";
+import SchoolLevelSection from "./forms/SchoolLevelSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import other sub-form sections as needed
-
 import { SchoolFormData, schoolSchema } from "../schemas/schema";
 import TopLevelFields from "./forms/TopLevelFields";
-import { defaultschoolValues } from "@/app/[locale]/schools/new/page";
 import { toast } from "sonner";
+import { DevTool } from "@hookform/devtools";
 
 type Props = {
   school: SchoolFormData;
   mode: "view" | "edit";
   onClose: () => void;
+  onSave: (updated: SchoolFormData) => void;
 };
 
-export default function SchoolModal({ school, mode, onClose }: Props) {
+export default function SchoolModal({ school, mode, onClose, onSave }: Props) {
+  const modalRef = useRef<HTMLDivElement>(null);
   const tForm = useTranslations("form");
   const isEdit = mode === "edit";
 
   const methods = useForm<SchoolFormData>({
     resolver: zodResolver(schoolSchema),
-    defaultValues: defaultschoolValues,
+    defaultValues: {
+      name: "",
+      phoneNumber1: "",
+      phoneNumber2: "",
+      phoneNumber3: "",
+      schoolsWebSite: "",
+      facebookProfileURL: "",
+      instagramProfileURL: "",
+      establishedYear: 1900,
+      accreditationStatus: "",
+      accreditationComment: "",
+      founder: "",
+      director: "",
+      publicRelationsManager: "",
+      parentRelationshipManager: "",
+      graduationRate: "",
+      averageNationalExamScore: "",
+      description: "",
+      otherPrograms: "",
+      hasTutor: false,
+      tutorDescription: "",
+      hasScholarshipsGrants: false,
+      scholarshipsGrants: "",
+      hasExchangePrograms: false,
+      exchangePrograms: "",
+      hasOutdoorGarden: false,
+      outdoorGarden: "",
+      address: { city: "", street: "", zipCode: "", district: "" },
+      infrastructure: {
+        buildings: false,
+        numberOfFloors: 0,
+        squareness: 0,
+        stadiums: false,
+        pools: false,
+        courtyard: false,
+        laboratories: false,
+        library: false,
+        cafe: false,
+      },
+
+      primary: {
+        price: 0,
+        discountAndPaymentTerms: "",
+        duration: "",
+        numberOfStudents: 0,
+        meals: "",
+        mealsDescription: "",
+        transportation: "",
+        schoolUniform: false,
+        mandatorySportsClubs: "",
+        teachingStyleBooks: "",
+        textbooksPrice: "",
+        clubsAndCircles: "",
+        foreignLanguages: "",
+      },
+      basic: {
+        price: 0,
+        discountAndPaymentTerms: "",
+        duration: "",
+        numberOfStudents: 0,
+        meals: "",
+        mealsDescription: "",
+        transportation: "",
+        schoolUniform: false,
+        mandatorySportsClubs: "",
+        teachingStyleBooks: "",
+        textbooksPrice: "",
+        clubsAndCircles: "",
+        foreignLanguages: "",
+      },
+      secondary: {
+        price: 0,
+        discountAndPaymentTerms: "",
+        duration: "",
+        numberOfStudents: 0,
+        meals: "",
+        mealsDescription: "",
+        transportation: "",
+        schoolUniform: false,
+        mandatorySportsClubs: "",
+        teachingStyleBooks: "",
+        textbooksPrice: "",
+        clubsAndCircles: "",
+        foreignLanguages: "",
+      },
+    },
   });
 
   const {
@@ -39,7 +124,10 @@ export default function SchoolModal({ school, mode, onClose }: Props) {
   } = methods;
 
   useEffect(() => {
-    reset(school);
+    if (school) {
+      console.log("Resetting with school:", school); // ✅ This helps you debug
+      reset(school); // ✅ sets form values
+    }
   }, [school, reset]);
 
   const onSubmit = async (data: SchoolFormData) => {
@@ -50,24 +138,45 @@ export default function SchoolModal({ school, mode, onClose }: Props) {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update school");
-      }
+      if (!response.ok) throw new Error("Failed to update school");
 
       const result = await response.json();
-      console.log("Updated school data:", result);
       toast.success("School updated successfully!");
+      onSave(result); // Update row in grid
       onClose();
     } catch (error) {
       toast.error("Failed to update school");
       console.error("Update error:", error);
-      // Optionally show an error message to the user
     }
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  console.log(school);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
-      <div className="bg-white p-6 w-[90%] max-h-[90%] overflow-y-auto rounded-lg">
+    <div
+      className="fixed inset-0 bg-black/50 z-[1000] flex items-center justify-center"
+      onClick={onClose} // <-- catch background click here
+    >
+      <div
+        className="bg-white p-6 w-[90%] max-h-[90%] overflow-y-auto rounded-lg"
+        onClick={(e) => e.stopPropagation()} // <-- prevent click from bubbling
+      >
         <h2>{isEdit ? "Edit" : "View"}</h2>
 
         <FormProvider {...methods}>
@@ -128,6 +237,7 @@ export default function SchoolModal({ school, mode, onClose }: Props) {
               </button>
             )}
           </form>
+          <DevTool control={control} />
         </FormProvider>
 
         <button onClick={onClose} className="mt-4">

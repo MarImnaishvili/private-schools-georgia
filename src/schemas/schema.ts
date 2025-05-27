@@ -4,18 +4,19 @@ import { z } from "zod";
 
 // Define school level section schema
 const schoolLevelSchema = z.object({
-  price: z.number().min(0),
+  price: z.number().optional(),
+  duration: z.string().optional(),
   discountAndPaymentTerms: z.string().optional(),
-  numberOfStudents: z.number().min(0),
+  numberOfStudents: z.number().optional(),
   meals: z.string().optional(),
   mealsDescription: z.string().optional(),
   transportation: z.string().optional(),
   schoolUniform: z.boolean(),
   mandatorySportsClubs: z.string().optional(),
+  foreignLanguages: z.string().optional(),
   teachingStyleBooks: z.string().optional(),
-  textbooksPrice: z.string().optional(),
   clubsAndCircles: z.string().optional(),
-  duration: z.string().optional(),
+  textbooksPrice: z.string().optional(),
 });
 
 // Main schema
@@ -37,13 +38,13 @@ export const schoolSchema = z.object({
   establishedYear: z.coerce
     .number()
     .int()
-    .min(1800)
+    .min(1900)
     .max(new Date().getFullYear())
     .optional(),
 
-  accreditationStatus: z.string().max(100).optional(),
+  accreditationStatus: z.string().optional(),
 
-  accreditationComment: z.string().max(500).optional(),
+  accreditationComment: z.string().optional(),
 
   graduationRate: z.string().optional(),
   averageNationalExamScore: z.string().optional(),
@@ -72,8 +73,8 @@ export const schoolSchema = z.object({
 
   infrastructure: z.object({
     buildings: z.boolean(),
-    numberOfFloors: z.number().min(0),
-    squareness: z.number().min(0),
+    numberOfFloors: z.number().optional(),
+    squareness: z.number().optional(),
     stadiums: z.boolean(),
     pools: z.boolean(),
     courtyard: z.boolean(),

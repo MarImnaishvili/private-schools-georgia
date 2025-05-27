@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "LevelName" AS ENUM ('Primary', 'Basic', 'Secondary');
+
+-- CreateEnum
 CREATE TYPE "MediaType" AS ENUM ('photo', 'video');
 
 -- CreateEnum
@@ -6,7 +9,7 @@ CREATE TYPE "MediaAttachment" AS ENUM ('school', 'primary', 'basic', 'secondary'
 
 -- CreateTable
 CREATE TABLE "SchoolData" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "addressId" INTEGER NOT NULL,
     "phoneNumber1" TEXT,
@@ -20,9 +23,9 @@ CREATE TABLE "SchoolData" (
     "publicRelationsManager" TEXT,
     "parentRelationshipManager" TEXT,
     "infrastructureId" INTEGER,
-    "primaryLevelId" INTEGER,
-    "basicLevelId" INTEGER,
-    "secondaryLevelID" INTEGER,
+    "primaryId" INTEGER,
+    "basicId" INTEGER,
+    "secondaryID" INTEGER,
     "otherPrograms" TEXT,
     "description" TEXT,
     "hasTutor" BOOLEAN NOT NULL DEFAULT false,
@@ -60,31 +63,23 @@ CREATE TABLE "Address" (
 -- CreateTable
 CREATE TABLE "Infrastructure" (
     "id" SERIAL NOT NULL,
-    "buildings_has" BOOLEAN NOT NULL DEFAULT false,
-    "buildings_comment" TEXT,
-    "numberOfFloors_has" INTEGER,
-    "numberOfFloors_comment" TEXT,
-    "squareness_has" INTEGER,
-    "squareness_comment" TEXT,
-    "stadiums_has" BOOLEAN NOT NULL DEFAULT false,
-    "stadiums_comment" TEXT,
-    "pools_has" BOOLEAN NOT NULL DEFAULT false,
-    "pools_comment" TEXT,
-    "courtyard_has" BOOLEAN NOT NULL DEFAULT false,
-    "courtyard_comment" TEXT,
-    "laboratories_has" BOOLEAN NOT NULL DEFAULT false,
-    "laboratories_comment" TEXT,
-    "library_has" BOOLEAN NOT NULL DEFAULT false,
-    "library_comment" TEXT,
-    "cafe_has" BOOLEAN NOT NULL DEFAULT false,
-    "cafe_comment" TEXT,
+    "buildings" BOOLEAN NOT NULL DEFAULT false,
+    "numberOfFloors" INTEGER,
+    "squareness" INTEGER,
+    "stadiums" BOOLEAN NOT NULL DEFAULT false,
+    "pools" BOOLEAN NOT NULL DEFAULT false,
+    "courtyard" BOOLEAN NOT NULL DEFAULT false,
+    "laboratories" BOOLEAN NOT NULL DEFAULT false,
+    "library" BOOLEAN NOT NULL DEFAULT false,
+    "cafe" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Infrastructure_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "PrimaryLevel" (
+CREATE TABLE "Primary" (
     "id" SERIAL NOT NULL,
+    "schoolId" TEXT NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
     "duration" TEXT NOT NULL,
     "discountAndPaymentTerms" TEXT,
@@ -92,22 +87,20 @@ CREATE TABLE "PrimaryLevel" (
     "meals" TEXT,
     "mealsDescription" TEXT,
     "transportation" TEXT,
-    "transportationDescription" TEXT,
     "schoolUniform" BOOLEAN NOT NULL DEFAULT false,
-    "schoolUniformDescription" TEXT,
     "mandatorySportsClubs" TEXT,
-    "optionalSportsClubs" TEXT,
     "foreignLanguages" TEXT,
     "teachingStyleBooks" TEXT,
     "clubsAndCircles" TEXT,
     "textbooksPrice" TEXT,
 
-    CONSTRAINT "PrimaryLevel_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Primary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "BasicLevel" (
+CREATE TABLE "Basic" (
     "id" SERIAL NOT NULL,
+    "schoolId" TEXT NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
     "duration" TEXT NOT NULL,
     "discountAndPaymentTerms" TEXT,
@@ -115,22 +108,20 @@ CREATE TABLE "BasicLevel" (
     "meals" TEXT,
     "mealsDescription" TEXT,
     "transportation" TEXT,
-    "transportationDescription" TEXT,
     "schoolUniform" BOOLEAN NOT NULL DEFAULT false,
-    "schoolUniformDescription" TEXT,
     "mandatorySportsClubs" TEXT,
-    "optionalSportsClubs" TEXT,
     "foreignLanguages" TEXT,
     "teachingStyleBooks" TEXT,
     "clubsAndCircles" TEXT,
     "textbooksPrice" TEXT,
 
-    CONSTRAINT "BasicLevel_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Basic_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "SecondaryLevel" (
+CREATE TABLE "Secondary" (
     "id" SERIAL NOT NULL,
+    "schoolId" TEXT NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
     "duration" TEXT NOT NULL,
     "discountAndPaymentTerms" TEXT,
@@ -138,17 +129,14 @@ CREATE TABLE "SecondaryLevel" (
     "meals" TEXT,
     "mealsDescription" TEXT,
     "transportation" TEXT,
-    "transportationDescription" TEXT,
     "schoolUniform" BOOLEAN NOT NULL DEFAULT false,
-    "schoolUniformDescription" TEXT,
     "mandatorySportsClubs" TEXT,
-    "optionalSportsClubs" TEXT,
     "foreignLanguages" TEXT,
     "teachingStyleBooks" TEXT,
     "clubsAndCircles" TEXT,
     "textbooksPrice" TEXT,
 
-    CONSTRAINT "SecondaryLevel_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Secondary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -156,10 +144,10 @@ CREATE TABLE "media" (
     "id" SERIAL NOT NULL,
     "media_url" TEXT NOT NULL,
     "description" TEXT,
-    "school_id" UUID,
-    "basic_level_id" INTEGER,
-    "primary_level_id" INTEGER,
-    "secondary_level_id" INTEGER,
+    "school_id" TEXT,
+    "basic_id" INTEGER,
+    "primary_id" INTEGER,
+    "secondary_id" INTEGER,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "type" "MediaType" NOT NULL,
@@ -169,69 +157,103 @@ CREATE TABLE "media" (
 );
 
 -- CreateTable
-CREATE TABLE "levelmandatorysport" (
-    "id" UUID NOT NULL,
-    "name" TEXT NOT NULL,
-    "schoolId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+CREATE TABLE "LevelMandatorySport" (
+    "id" SERIAL NOT NULL,
+    "school_id" TEXT NOT NULL,
+    "school_name" TEXT NOT NULL,
+    "level_name" "LevelName" NOT NULL,
+    "level_id" INTEGER NOT NULL,
+    "sport" TEXT NOT NULL,
+    "price" DECIMAL(10,2) NOT NULL,
+    "duration" TEXT NOT NULL,
+    "discountAndPaymentTerms" TEXT,
+    "numberOfStudents" INTEGER NOT NULL,
+    "meals" TEXT,
+    "mealsDescription" TEXT,
+    "transportation" TEXT,
+    "transportationDescription" TEXT,
+    "schoolUniform" BOOLEAN NOT NULL,
+    "schoolUniformDescription" TEXT,
+    "optionalSportsClubs" TEXT,
+    "foreignLanguages" TEXT,
+    "teachingStyleBooks" TEXT,
+    "clubsAndCircles" TEXT,
+    "textbooksPrice" TEXT,
 
-    CONSTRAINT "levelmandatorysport_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "LevelMandatorySport_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE INDEX "SchoolData_addressId_idx" ON "SchoolData"("addressId");
 
 -- CreateIndex
-CREATE INDEX "SchoolData_basicLevelId_idx" ON "SchoolData"("basicLevelId");
+CREATE INDEX "SchoolData_basicId_idx" ON "SchoolData"("basicId");
 
 -- CreateIndex
 CREATE INDEX "SchoolData_infrastructureId_idx" ON "SchoolData"("infrastructureId");
 
 -- CreateIndex
-CREATE INDEX "SchoolData_primaryLevelId_idx" ON "SchoolData"("primaryLevelId");
+CREATE INDEX "SchoolData_primaryId_idx" ON "SchoolData"("primaryId");
 
 -- CreateIndex
-CREATE INDEX "SchoolData_secondaryLevelID_idx" ON "SchoolData"("secondaryLevelID");
+CREATE INDEX "SchoolData_secondaryID_idx" ON "SchoolData"("secondaryID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Primary_schoolId_key" ON "Primary"("schoolId");
+
+-- CreateIndex
+CREATE INDEX "Primary_schoolId_idx" ON "Primary"("schoolId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Basic_schoolId_key" ON "Basic"("schoolId");
+
+-- CreateIndex
+CREATE INDEX "Basic_schoolId_idx" ON "Basic"("schoolId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Secondary_schoolId_key" ON "Secondary"("schoolId");
+
+-- CreateIndex
+CREATE INDEX "Secondary_schoolId_idx" ON "Secondary"("schoolId");
 
 -- CreateIndex
 CREATE INDEX "media_school_id_idx" ON "media"("school_id");
 
 -- CreateIndex
-CREATE INDEX "media_basic_level_id_idx" ON "media"("basic_level_id");
+CREATE INDEX "media_basic_id_idx" ON "media"("basic_id");
 
 -- CreateIndex
-CREATE INDEX "media_primary_level_id_idx" ON "media"("primary_level_id");
+CREATE INDEX "media_primary_id_idx" ON "media"("primary_id");
 
 -- CreateIndex
-CREATE INDEX "media_secondary_level_id_idx" ON "media"("secondary_level_id");
+CREATE INDEX "media_secondary_id_idx" ON "media"("secondary_id");
 
 -- AddForeignKey
 ALTER TABLE "SchoolData" ADD CONSTRAINT "SchoolData_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SchoolData" ADD CONSTRAINT "SchoolData_basicLevelId_fkey" FOREIGN KEY ("basicLevelId") REFERENCES "BasicLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "SchoolData" ADD CONSTRAINT "SchoolData_infrastructureId_fkey" FOREIGN KEY ("infrastructureId") REFERENCES "Infrastructure"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SchoolData" ADD CONSTRAINT "SchoolData_primaryLevelId_fkey" FOREIGN KEY ("primaryLevelId") REFERENCES "PrimaryLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Primary" ADD CONSTRAINT "Primary_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "SchoolData"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SchoolData" ADD CONSTRAINT "SchoolData_secondaryLevelID_fkey" FOREIGN KEY ("secondaryLevelID") REFERENCES "SecondaryLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Basic" ADD CONSTRAINT "Basic_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "SchoolData"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "media" ADD CONSTRAINT "media_basic_level_id_fkey" FOREIGN KEY ("basic_level_id") REFERENCES "BasicLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Secondary" ADD CONSTRAINT "Secondary_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "SchoolData"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "media" ADD CONSTRAINT "media_primary_level_id_fkey" FOREIGN KEY ("primary_level_id") REFERENCES "PrimaryLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "media" ADD CONSTRAINT "media_basic_id_fkey" FOREIGN KEY ("basic_id") REFERENCES "Basic"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "media" ADD CONSTRAINT "media_primary_id_fkey" FOREIGN KEY ("primary_id") REFERENCES "Primary"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "media" ADD CONSTRAINT "media_school_id_fkey" FOREIGN KEY ("school_id") REFERENCES "SchoolData"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "media" ADD CONSTRAINT "media_secondary_level_id_fkey" FOREIGN KEY ("secondary_level_id") REFERENCES "SecondaryLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "media" ADD CONSTRAINT "media_secondary_id_fkey" FOREIGN KEY ("secondary_id") REFERENCES "Secondary"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "levelmandatorysport" ADD CONSTRAINT "levelmandatorysport_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "SchoolData"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "LevelMandatorySport" ADD CONSTRAINT "LevelMandatorySport_school_id_fkey" FOREIGN KEY ("school_id") REFERENCES "SchoolData"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

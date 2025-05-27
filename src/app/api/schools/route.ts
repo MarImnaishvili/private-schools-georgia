@@ -11,9 +11,9 @@ export async function GET() {
       include: {
         address: true,
         infrastructure: true,
-        primaryLevel: { include: { media: true } },
-        basicLevel: { include: { media: true } },
-        secondaryLevel: { include: { media: true } },
+        primary: { include: { media: true } },
+        basic: { include: { media: true } },
+        secondary: { include: { media: true } },
       },
     });
 
@@ -76,37 +76,28 @@ export async function POST(req: Request) {
 
         infrastructure: {
           create: {
-            buildings_has: body.infrastructure.buildings,
-            numberOfFloors_has: body.infrastructure.numberOfFloors,
-            squareness_has: body.infrastructure.squareness,
-            stadiums_has: body.infrastructure.stadiums,
-            pools_has: body.infrastructure.pools,
-            courtyard_has: body.infrastructure.courtyard,
-            laboratories_has: body.infrastructure.laboratories,
-            library_has: body.infrastructure.library,
-            cafe_has: body.infrastructure.cafe,
-            // Set all _comment fields to null or default for now
-            buildings_comment: null,
-            numberOfFloors_comment: null,
-            squareness_comment: null,
-            stadiums_comment: null,
-            pools_comment: null,
-            courtyard_comment: null,
-            laboratories_comment: null,
-            library_comment: null,
-            cafe_comment: null,
+            buildings: body.infrastructure.buildings,
+            numberOfFloors: body.infrastructure.numberOfFloors,
+            squareness: body.infrastructure.squareness,
+            stadiums: body.infrastructure.stadiums,
+            pools: body.infrastructure.pools,
+            courtyard: body.infrastructure.courtyard,
+            laboratories: body.infrastructure.laboratories,
+            library: body.infrastructure.library,
+            cafe: body.infrastructure.cafe,
           },
         },
 
-        primaryLevel: {
+        primary: {
           create: {
             price: body.primary.price,
-            schoolUniform: body.primary.schoolUniform,
+            duration: body.primary.duration,
             discountAndPaymentTerms: body.primary.discountAndPaymentTerms,
             numberOfStudents: body.primary.numberOfStudents,
             meals: body.primary.meals,
             mealsDescription: body.primary.mealsDescription,
             transportation: body.primary.transportation,
+            schoolUniform: body.primary.schoolUniform,
             mandatorySportsClubs: Array.isArray(
               body.primary.mandatorySportsClubs
             )
@@ -116,7 +107,7 @@ export async function POST(req: Request) {
             teachingStyleBooks: body.primary.teachingStyleBooks,
             textbooksPrice: body.primary.textbooksPrice || null,
             clubsAndCircles: body.primary.clubsAndCircles,
-            duration: body.primary.duration,
+            foreignLanguages: body.primary.foreignLanguages,
             media: body.primary.schoolUniformPhotoUrls?.length
               ? {
                   create: body.primary.schoolUniformPhotoUrls.map(
@@ -129,7 +120,7 @@ export async function POST(req: Request) {
               : undefined,
           },
         },
-        basicLevel: {
+        basic: {
           create: {
             price: body.basic.price,
             schoolUniform: body.basic.schoolUniform,
@@ -146,6 +137,7 @@ export async function POST(req: Request) {
             textbooksPrice: body.basic.textbooksPrice || null,
             clubsAndCircles: body.basic.clubsAndCircles,
             duration: body.basic.duration,
+            foreignLanguages: body.basic.foreignLanguages,
             media: body.basic.schoolUniformPhotoUrls?.length
               ? {
                   create: body.basic.schoolUniformPhotoUrls.map(
@@ -158,7 +150,7 @@ export async function POST(req: Request) {
               : undefined,
           },
         },
-        secondaryLevel: {
+        secondary: {
           create: {
             price: body.secondary.price,
             schoolUniform: body.secondary.schoolUniform,
@@ -166,6 +158,7 @@ export async function POST(req: Request) {
             numberOfStudents: body.secondary.numberOfStudents,
             meals: body.secondary.meals,
             mealsDescription: body.secondary.mealsDescription,
+            foreignLanguages: body.secondary.foreignLanguages,
             transportation: body.secondary.transportation,
             mandatorySportsClubs: Array.isArray(
               body.secondary.mandatorySportsClubs
