@@ -27,7 +27,7 @@ const defaultschoolLevel = {
   foreignLanguages: "",
 };
 
-export const defaultschoolValues = {
+const defaultschoolValues = {
   name: "",
   phoneNumber1: "",
   phoneNumber2: "",

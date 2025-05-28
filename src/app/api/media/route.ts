@@ -7,7 +7,7 @@ type IncomingMediaItem = {
   description: string;
   type: "photo" | "video";
   attachedTo: "school" | "primary" | "basic" | "secondary";
-  attachedId: number;
+  attachedId: string | number; // may arrive as number
 };
 
 export async function POST(request: Request) {
@@ -26,7 +26,8 @@ export async function POST(request: Request) {
     for (const item of mediaItems) {
       if (
         typeof item.mediaUrl !== "string" ||
-        typeof item.attachedId !== "number" ||
+        (typeof item.attachedId !== "number" &&
+          typeof item.attachedId !== "string") ||
         !["photo", "video"].includes(item.type) ||
         !["school", "primary", "basic", "secondary"].includes(item.attachedTo)
       ) {
@@ -40,20 +41,23 @@ export async function POST(request: Request) {
         mediaUrl: item.mediaUrl,
         description: item.description,
         type: item.type,
+        attachedTo: item.attachedTo,
       };
+
+      const id = String(item.attachedId); // ✅ Convert to string for Prisma
 
       switch (item.attachedTo) {
         case "school":
-          validItems.push({ ...base, schoolId: item.attachedId });
+          validItems.push({ ...base, schoolId: id });
           break;
         case "primary":
-          validItems.push({ ...base, primaryLevelId: item.attachedId });
+          validItems.push({ ...base, primaryLevelId: id });
           break;
         case "basic":
-          validItems.push({ ...base, basicLevelId: item.attachedId });
+          validItems.push({ ...base, basicLevelId: id });
           break;
         case "secondary":
-          validItems.push({ ...base, secondaryLevelId: item.attachedId });
+          validItems.push({ ...base, secondaryLevelId: id });
           break;
       }
     }

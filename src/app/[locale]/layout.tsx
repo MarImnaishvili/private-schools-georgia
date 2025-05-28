@@ -5,12 +5,12 @@ import "../globals.css";
 
 type Props = {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
-export default async function LocaleLayout(props: Props) {
-  const { children } = props;
-  const { locale } = await Promise.resolve(props.params);
+export default async function LocaleLayout({ children, params }: Props) {
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
   const messages = (await import(`../../messages/${locale}.json`)).default;
 
   return (

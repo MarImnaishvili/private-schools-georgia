@@ -19,12 +19,14 @@ function transformNestedUpdates(data: any) {
   };
 }
 
-export async function GET(
-  req: NextRequest,
-  context: Promise<{ params: { id: string } }>
-) {
-  const { params } = await context;
-  const { id } = params;
+// ✅ FIXED GET signature
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const id = url.pathname.split("/").pop(); // extract ID from the URL
+
+  if (!id || !uuidSchema.safeParse(id).success) {
+    return new NextResponse("Invalid ID", { status: 400 });
+  }
 
   const school = await prisma.schoolData.findUnique({
     where: { id },
@@ -44,18 +46,19 @@ export async function GET(
   return NextResponse.json(school);
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest) {
   try {
-    const id = uuidSchema.parse(params.id);
-    const data = await req.json();
+    const id = req.nextUrl.pathname.split("/").pop();
+    if (!id) {
+      return new NextResponse("Missing school ID", { status: 400 });
+    }
 
+    const validId = uuidSchema.parse(id);
+    const data = await req.json();
     const transformedData = transformNestedUpdates(data);
 
     const updated = await prisma.schoolData.update({
-      where: { id },
+      where: { id: validId },
       data: transformedData,
       include: {
         address: true,
@@ -76,18 +79,19 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const { id } = params;
-
+export async function DELETE(req: NextRequest) {
   try {
-    // Log for debugging
-    console.log("Deleting school with ID:", id);
+    const id = req.nextUrl.pathname.split("/").pop();
+    if (!id) {
+      return new NextResponse("Missing school ID", { status: 400 });
+    }
+
+    const validId = uuidSchema.parse(id);
+
+    console.log("Deleting school with ID:", validId);
 
     const deleted = await prisma.schoolData.delete({
-      where: { id },
+      where: { id: validId },
     });
 
     return NextResponse.json(deleted);
