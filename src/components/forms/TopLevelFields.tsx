@@ -65,7 +65,7 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
               onClick={handleAddPhoneNumber2}
               className="h-10 w-10 flex items-center justify-center border rounded text-xl"
             >
-              +
+              +/-
             </button>
           </div>
 
@@ -90,7 +90,7 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
                 onClick={handleAddPhoneNumber3}
                 className="h-10 w-10 flex items-center justify-center border rounded text-xl"
               >
-                +
+                +/-
               </button>
             </div>
           )}

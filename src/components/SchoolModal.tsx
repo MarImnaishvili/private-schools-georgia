@@ -149,8 +149,6 @@ export default function SchoolModal({ school, mode, onClose, onSave }: Props) {
     }
   };
 
-  // inside SchoolModal.tsx (or whatever your modal file is)
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (

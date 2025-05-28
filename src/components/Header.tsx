@@ -11,7 +11,6 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full h-16 bg-gray-800 text-white shadow-md z-50 px-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
-        {/* Left side: Title + Nav */}
         <div className="flex items-center gap-6">
           <h1 className="text-lg font-bold tracking-wide whitespace-nowrap">
             <Link href="/" className="hover:text-blue-400 transition-colors">
@@ -27,8 +26,6 @@ export default function Header() {
             </Link>
           </nav>
         </div>
-
-        {/* Right side: Language Switcher */}
         <LanguageSwitcher />
       </div>
     </header>
