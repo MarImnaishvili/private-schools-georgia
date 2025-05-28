@@ -158,7 +158,7 @@ export default function SchoolsGrid() {
   ];
 
   return (
-    <div className="ag-theme-alpine" style={{ height: "100vh", width: "100%" }}>
+    <div className="ag-theme-alpine mt-12 h-screen max-w-5xl mx-auto">
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}

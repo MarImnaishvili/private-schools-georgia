@@ -101,8 +101,7 @@ export default function NewSchoolPage() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">{tForm("addNewSchool")}</h1>
+    <div className="p-9 mt-8 max-w-4xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <TopLevelFields register={register} errors={errors} />
         <AddressSection register={register} errors={errors} />
