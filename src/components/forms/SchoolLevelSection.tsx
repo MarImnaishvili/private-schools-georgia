@@ -29,16 +29,12 @@ const field = <T extends SchoolLevelKey, K extends keyof SchoolLevelFields>(
   key: K
 ): Path<SchoolFormData> => `${level}.${key}` as Path<SchoolFormData>;
 
-const mealsOptions = [
-  "no meals",
-  "included in the price",
-  "not included in the price",
-];
+const mealsOptions = ["noMeals", "includedInThePrice", "notIncludedInThePrice"];
 
 const transportationOptions = [
-  "no transportation service",
-  "included in the price",
-  "not included in the price",
+  "noTransportationService",
+  "includedInThePrice",
+  "notIncludedInThePrice",
 ];
 
 const sportsClubsOptions = [
@@ -67,10 +63,7 @@ const foreignLanguagesOptions = [
 ];
 
 // multiple choice for mandatorySportsClubs and then combine as onre text.
-const textbooksPriceOptions = [
-  "included in the price",
-  "not included in the price",
-];
+const textbooksPriceOptions = ["includedInThePrice", "notIncludedInThePrice"];
 
 export default function SchoolLevelSection({
   level,

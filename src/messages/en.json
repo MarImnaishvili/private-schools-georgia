@@ -1,8 +1,8 @@
 {
   "General": {
-    "Georgian Private Schools": "Private Schools",
+    "GeorgianPrivateSchools": "Private Schools",
     "Home": "Home",
-    "Create school": "Create school"
+    "CreateSchool": "Create school"
   },
   "form": {
     "id": "Id",
@@ -42,7 +42,7 @@
     "inProgress": "in progress",
     "media": "photo/video",
     "required": "required",
-    "need to be number": "need to be number",
+    "needToBeNumber": "need to be number",
     "hasTutor": "Has Tutor",
     "tutorDescription": "Tutor Description",
     "hasScholarshipsGrants": "Has Scholarships Grants",
@@ -86,10 +86,10 @@
     "textbooksPrice": "Textbooks Price",
     "booksPriceIncludes": "Books Price Includes",
     "clubsAndCircles": "Clubs and Circles",
-    "no meals": "no meals",
-    "included in the price": "included in the price",
-    "not included in the price": "not included in the price",
-    "no transportation service": "no transportation service",
+    "noMeals": "no meals",
+    "includedInThePrice": "included in the price",
+    "notIncludedInThePrice": "not included in the price",
+    "noTransportationService": "no transportation service",
     "Swimming": "Swimming",
     "basketball": "basketball",
     "football": "football",
@@ -127,14 +127,14 @@
     "gldani-nadzaladevi": "gldani-nadzaladevi",
     "didube-chugureti": "didube-chugureti",
     "dzveli-tbilisi": "dzveli-tbilisi",
-    "tbilisis shemogareni": "tbilisis shemogareni",
+    "tbilisisShemogareni": "tbilisis shemogareni",
     "required": "required"
   },
   "media": {
-    "Add New Media": "Add new photo/video",
-    "Save Media": "Save",
+    "AddNewMedia": "Add new photo/video",
+    "SaveMedia": "Save",
     "Media": "photo/video",
-    "Media URL": "photo/video URL",
+    "MediaURL": "photo/video URL",
     "Photo": "Photo",
     "Video": "Video",
     "School": "About School",
@@ -142,10 +142,10 @@
     "Basic": "Basic",
     "Secondary": "Secondary",
     "Remove": "Remove",
-    "Add Media Item": "Add photo/video",
-    "Media Items": "photo/video Items",
+    "AddMediaItem": "Add photo/video",
+    "MediaItems": "photo/video Items",
     "Description": "Description",
-    "Description (optional)": "Description (optional)",
+    "Description_(optional)": "Description (optional)",
     "required": "required"
   }
 }

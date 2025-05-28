@@ -44,7 +44,7 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
 
   return (
     <div>
-      <h2>{tMedia("Media Items")}</h2>
+      <h2>{tMedia("MediaItems")}</h2>
       {media.map((item, i) => (
         <div key={i} className="mb-4 border p-2 rounded">
           <input
@@ -106,7 +106,7 @@ export default function MediaManager({ media, onChange }: MediaManagerProps) {
         onClick={handleAdd}
         className="bg-blue-600 text-white px-3 py-1 rounded"
       >
-        {tMedia("Add Media Item")}
+        {tMedia("AddMediaItem")}
       </button>
     </div>
   );

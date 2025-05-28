@@ -120,30 +120,28 @@ export default function SchoolsGrid() {
     {
       headerName: tForm("actions"),
       cellRenderer: (params: { data: SchoolGridRow }) => (
-        <div
-          tabIndex={-1}
-          className="outline-none focus:outline-none flex gap-2"
-        >
+        <div className="flex gap-2 ">
           <button
             onClick={() => openModal(params.data, "view")}
-            className="text-gray-400"
+            className="text-gray-400 hover:text-gray-800 transition-colors focus:outline-none"
           >
             View
           </button>
           <button
             onClick={() => openModal(params.data, "edit")}
-            className="text-blue-400"
+            className="text-blue-400 hover:text-blue-800 transition-colors focus:outline-none"
           >
             Edit
           </button>
           <button
             onClick={() => handleDelete(params.data)}
-            className="text-red-400"
+            className="text-red-400 hover:text-red-800 transition-colors focus:outline-none"
           >
             Delete
           </button>
         </div>
       ),
+      cellClass: "ag-no-focus-outline", // this class removes default outline
     },
     { headerName: tForm("name"), field: "name" },
     { headerName: tForm("phoneNumber1"), field: "phoneNumber1" },
@@ -158,7 +156,7 @@ export default function SchoolsGrid() {
   ];
 
   return (
-    <div className="ag-theme-alpine" style={{ height: "100vh", width: "100%" }}>
+    <div className="ag-theme-alpine mt-12 h-screen max-w-5xl mx-auto">
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}

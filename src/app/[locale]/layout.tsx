@@ -1,6 +1,5 @@
 import { NextIntlClientProvider } from "next-intl";
 import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
 import "../globals.css";
 
 type Props = {
@@ -18,7 +17,6 @@ export default async function LocaleLayout(props: Props) {
       <div className="flex flex-col min-h-screen">
         <Header />
         <div className="flex flex-row">
-          <Sidebar />
           <main className="flex-1 p-4">{children}</main>
         </div>
       </div>
