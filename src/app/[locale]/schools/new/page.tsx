@@ -24,6 +24,7 @@ const defaultschoolLevel = {
   teachingStyleBooks: "",
   textbooksPrice: "",
   clubsAndCircles: "",
+  foreignLanguages: "",
 };
 
 export const defaultschoolValues = {

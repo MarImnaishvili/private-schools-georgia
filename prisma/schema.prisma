@@ -10,7 +10,6 @@ datasource db {
 model SchoolData {
   id                        String                @id @default(uuid())
   name                      String
-  addressId                 Int
   phoneNumber1              String?
   phoneNumber2              String?
   phoneNumber3              String?
@@ -21,10 +20,6 @@ model SchoolData {
   director                  String?
   publicRelationsManager    String?
   parentRelationshipManager String?
-  infrastructureId          Int?
-  primaryId                 Int?
-  basicId                   Int?
-  secondaryID               Int?
   otherPrograms             String?
   description               String?
   hasTutor                  Boolean               @default(false)
@@ -42,128 +37,127 @@ model SchoolData {
   establishedYear           Int?
   accreditationStatus       String?
   accreditationComment      String?
-  graduationRate            Float?                @db.Real
-  averageNationalExamScore  Float?                @db.Real
-  address                   Address               @relation(fields: [addressId], references: [id])
-  infrastructure            Infrastructure?       @relation(fields: [infrastructureId], references: [id])
-  primary              Primary?         @relation("PrimaryToSchool")
-  basic                Basic?           @relation("BasicToSchool")
-  secondary            Secondary?       @relation("SecondaryToSchool")
+  graduationRate            String?
+  averageNationalExamScore  String?
+  address                   Address?              @relation("AddressToSchool")
+  infrastructure            Infrastructure?       @relation("InfrastructureToSchool")
+  primary                   Primary?              @relation("PrimaryToSchool")
+  basic                     Basic?                @relation("BasicToSchool")
+  secondary                 Secondary?            @relation("SecondaryToSchool")
   media                     Media[]
-  levelMandatorySports      LevelMandatorySport[]
-
-  @@index([addressId])
-  @@index([basicId])
-  @@index([infrastructureId])
-  @@index([primaryId])
-  @@index([secondaryID])
+  levelMandatorySports      LevelMandatorySport[] @relation("SchoolToLevelMandatorySport")
 }
 
 model Address {
-  id       Int          @id @default(autoincrement())
-  city     String
-  district String
-  street   String
-  zipCode  String
-  schools  SchoolData[]
+  id           String     @id @default(uuid())
+  schoolDataId String     @unique
+  city         String?
+  district     String?
+  street       String?
+  zipCode      String?
+  school       SchoolData @relation("AddressToSchool", fields: [schoolDataId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Infrastructure {
-  id                     Int          @id @default(autoincrement())
-  buildings              Boolean      @default(false)
-  numberOfFloors         Int?
-  squareness             Int?
-  stadiums               Boolean      @default(false)
-  pools                  Boolean      @default(false)
-  courtyard              Boolean      @default(false)
-  laboratories           Boolean      @default(false)
-  library                Boolean      @default(false)
-  cafe                   Boolean      @default(false)
-  schools                SchoolData[]
+  id             String     @id @default(uuid())
+  schoolDataId   String     @unique
+  buildings      Boolean?   @default(false)
+  numberOfFloors Int?
+  squareness     Int?
+  stadiums       Boolean?   @default(false)
+  pools          Boolean?   @default(false)
+  courtyard      Boolean?   @default(false)
+  laboratories   Boolean?   @default(false)
+  library        Boolean?   @default(false)
+  cafe           Boolean?   @default(false)
+  school         SchoolData @relation("InfrastructureToSchool", fields: [schoolDataId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Primary {
-  id                        Int        @id @default(autoincrement())
-  schoolId                  String     @unique
-  school                    SchoolData @relation("PrimaryToSchool", fields: [schoolId], references: [id]) 
-  price                     Decimal
-  duration                  String
-  discountAndPaymentTerms   String?
-  numberOfStudents          Int
-  meals                     String?
-  mealsDescription          String?
-  transportation            String?
-  schoolUniform             Boolean    @default(false)
-  mandatorySportsClubs      String?
-  foreignLanguages          String?
-  teachingStyleBooks        String?
-  clubsAndCircles           String?
-  textbooksPrice            String?
-  media                     Media[]
+  id                      String                @id @default(uuid())
+  schoolId                String                @unique
+  school                  SchoolData            @relation("PrimaryToSchool", fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  price                   Int?
+  duration                String?
+  discountAndPaymentTerms String?
+  numberOfStudents        Int?
+  meals                   String?
+  mealsDescription        String?
+  transportation          String?
+  schoolUniform           Boolean               @default(false)
+  mandatorySportsClubs    String?
+  foreignLanguages        String?
+  teachingStyleBooks      String?
+  clubsAndCircles         String?
+  textbooksPrice          String?
+  media                   Media[]
+  levelMandatorySports    LevelMandatorySport[] @relation("PrimaryToLevelMandatorySport")
 
   @@index([schoolId])
 }
 
 model Basic {
-  id                        Int        @id @default(autoincrement())
-  schoolId                  String     @unique
-  school                    SchoolData @relation("BasicToSchool", fields: [schoolId], references: [id]) 
-  price                     Decimal
-  duration                  String
-  discountAndPaymentTerms   String?
-  numberOfStudents          Int
-  meals                     String?
-  mealsDescription          String?
-  transportation            String?
-  schoolUniform             Boolean    @default(false)
-  mandatorySportsClubs      String?
-  foreignLanguages          String?
-  teachingStyleBooks        String?
-  clubsAndCircles           String?
-  textbooksPrice            String?
-  media                     Media[]
+  id                      String                @id @default(uuid())
+  schoolId                String                @unique
+  school                  SchoolData            @relation("BasicToSchool", fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  price                   Int?
+  duration                String?
+  discountAndPaymentTerms String?
+  numberOfStudents        Int?
+  meals                   String?
+  mealsDescription        String?
+  transportation          String?
+  schoolUniform           Boolean               @default(false)
+  mandatorySportsClubs    String?
+  foreignLanguages        String?
+  teachingStyleBooks      String?
+  clubsAndCircles         String?
+  textbooksPrice          String?
+  media                   Media[]
+  levelMandatorySports    LevelMandatorySport[] @relation("BasicToLevelMandatorySport")
 
   @@index([schoolId])
 }
 
 model Secondary {
-  id                        Int        @id @default(autoincrement())
-  schoolId                  String     @unique
-  school                    SchoolData @relation("SecondaryToSchool", fields: [schoolId], references: [id]) 
-  price                     Decimal
-  duration                  String
-  discountAndPaymentTerms   String?
-  numberOfStudents          Int
-  meals                     String?
-  mealsDescription          String?
-  transportation            String?
-  schoolUniform             Boolean    @default(false)
-  mandatorySportsClubs      String?
-  foreignLanguages          String?
-  teachingStyleBooks        String?
-  clubsAndCircles           String?
-  textbooksPrice            String?
-  media                     Media[]
+  id                      String                @id @default(uuid())
+  schoolId                String                @unique
+  school                  SchoolData            @relation("SecondaryToSchool", fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  price                   Int?
+  duration                String?
+  discountAndPaymentTerms String?
+  numberOfStudents        Int?
+  meals                   String?
+  mealsDescription        String?
+  transportation          String?
+  schoolUniform           Boolean               @default(false)
+  mandatorySportsClubs    String?
+  foreignLanguages        String?
+  teachingStyleBooks      String?
+  clubsAndCircles         String?
+  textbooksPrice          String?
+  media                   Media[]
+  levelMandatorySports    LevelMandatorySport[] @relation("SecondaryToLevelMandatorySport")
 
   @@index([schoolId])
 }
 
 model Media {
-  id               Int             @id @default(autoincrement())
-  mediaUrl         String          @map("media_url")
-  description      String?
-  schoolId         String?         @map("school_id")
-  basicId          Int?            @map("basic_id")
-  primaryId        Int?            @map("primary_id")
-  secondaryId      Int?            @map("secondary_id")
-  createdAt        DateTime?       @default(now()) @map("created_at")
-  updatedAt        DateTime?       @default(now()) @updatedAt @map("updated_at")
-  type             MediaType
-  attachedTo       MediaAttachment
-  basic       Basic?     @relation(fields: [basicId], references: [id])
-  primary     Primary?   @relation(fields: [primaryId], references: [id])
-  school           SchoolData?     @relation(fields: [schoolId], references: [id])
-  secondary   Secondary? @relation(fields: [secondaryId], references: [id])
+  id          String          @id @default(uuid())
+  mediaUrl    String          @map("media_url")
+  description String?
+  schoolId    String?         @map("school_id")
+  basicId     String?         @map("basic_id")
+  primaryId   String?         @map("primary_id")
+  secondaryId String?         @map("secondary_id")
+  createdAt   DateTime?       @default(now()) @map("created_at")
+  updatedAt   DateTime?       @default(now()) @updatedAt @map("updated_at")
+  type        MediaType
+  attachedTo  MediaAttachment
+  basic       Basic?          @relation(fields: [basicId], references: [id])
+  primary     Primary?        @relation(fields: [primaryId], references: [id])
+  school      SchoolData?     @relation(fields: [schoolId], references: [id])
+  secondary   Secondary?      @relation(fields: [secondaryId], references: [id])
 
   @@index([schoolId])
   @@index([basicId])
@@ -173,31 +167,23 @@ model Media {
 }
 
 model LevelMandatorySport {
-  id          Int       @id @default(autoincrement())
-  school_id   String    
-  school_name String
+  id          String    @id @default(uuid())
+  school_id   String
+  school_name String?
   level_name  LevelName
-  level_id    Int
-  sport       String
+  level_id    String
+  sport       String?
+  primaryId   String?
+  basicId     String?
+  secondaryId String?
 
-  price                     Decimal @db.Decimal(10, 2) // adjust precision as needed
-  duration                  String
-  discountAndPaymentTerms   String?
-  numberOfStudents          Int
-  meals                     String?
-  mealsDescription          String?
-  transportation            String?
-  transportationDescription String?
-  schoolUniform             Boolean
-  schoolUniformDescription  String?
-  optionalSportsClubs       String?
-  foreignLanguages          String?
-  teachingStyleBooks        String?
-  clubsAndCircles           String?
-  textbooksPrice            String?
+  primary   Primary?   @relation("PrimaryToLevelMandatorySport", fields: [primaryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  basic     Basic?     @relation("BasicToLevelMandatorySport", fields: [basicId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  secondary Secondary? @relation("SecondaryToLevelMandatorySport", fields: [secondaryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  school SchoolData @relation(fields: [school_id], references: [id])
+  school SchoolData @relation("SchoolToLevelMandatorySport", fields: [school_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  @@index([school_id])
   @@map("LevelMandatorySport") // map to exact DB table name
 }
 

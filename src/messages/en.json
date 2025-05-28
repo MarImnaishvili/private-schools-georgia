@@ -102,8 +102,17 @@
     "yoga": "yoga",
     "gymnastics": "gymnastics",
     "description": "description",
-    "Select sports clubs": "Select mandatory sports clubs",
-    "required": "required"
+    "SelectSportsClubs": "Select mandatory sports clubs",
+    "required": "required",
+    "German": "German",
+    "French": "French",
+    "Russian": "Russian",
+    "Spanish": "Spanish",
+    "Italian": "Italian",
+    "Chinese": "Chinese",
+    "Turkish": "Turkish",
+    "Japanese": "Japanese",
+    "SelectForeignLanguages": "Select Foreign Languages"
   },
 
   "address": {

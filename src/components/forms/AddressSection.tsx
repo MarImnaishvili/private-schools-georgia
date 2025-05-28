@@ -84,6 +84,7 @@ export default function AddressSection({ register, errors, disabled }: Props) {
           <select
             {...register("address.district")}
             className="w-full border p-2"
+            disabled={disabled}
           >
             <option disabled={disabled} value="">
               {t("selectDistrict")}

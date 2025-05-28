@@ -11,9 +11,10 @@ import { Card, CardContent } from "../ui/Card";
 type Props = {
   register: UseFormRegister<SchoolFormData>;
   errors: FieldErrors<SchoolFormData>;
+  disabled?: boolean;
 };
 
-export default function TopLevelFields({ register, errors }: Props) {
+export default function TopLevelFields({ register, errors, disabled }: Props) {
   const tForm = useTranslations("form");
   const [addPhoneNumber, setAddPhoneNumber] = useState(false);
   const [addMorePhoneNumber, setAddMorePhoneNumber] = useState(false);
@@ -37,6 +38,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("name")}
             placeholder={tForm("name")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.name && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -52,6 +54,7 @@ export default function TopLevelFields({ register, errors }: Props) {
                 {...register("phoneNumber1")}
                 placeholder={tForm("phoneNumber1")}
                 className="w-full border p-2 rounded"
+                disabled={disabled}
               />
               {errors?.phoneNumber1 && (
                 <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -76,6 +79,7 @@ export default function TopLevelFields({ register, errors }: Props) {
                   {...register("phoneNumber2")}
                   placeholder={tForm("phoneNumber2")}
                   className="w-full border p-2 rounded"
+                  disabled={disabled}
                 />
                 {errors?.phoneNumber2 && (
                   <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -100,6 +104,7 @@ export default function TopLevelFields({ register, errors }: Props) {
                 {...register("phoneNumber3")}
                 placeholder={tForm("phoneNumber3")}
                 className="w-full border p-2 rounded"
+                disabled={disabled}
               />
               {errors?.phoneNumber3 && (
                 <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -115,6 +120,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("schoolsWebSite")}
             placeholder={tForm("schoolsWebSite")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.schoolsWebSite && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -130,6 +136,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("facebookProfileURL")}
             placeholder={tForm("facebookProfileURL")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.facebookProfileURL && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -145,6 +152,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("instagramProfileURL")}
             placeholder={tForm("instagramProfileURL")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.instagramProfileURL && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -158,6 +166,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("establishedYear")}
             placeholder={tForm("establishedYear")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.establishedYear && (
             <p className="text-red-500 text-sm">{tForm("need to be number")}</p>
@@ -173,6 +182,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("accreditationStatus")}
             placeholder={tForm("accreditationStatus")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.accreditationStatus && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -188,6 +198,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("accreditationComment")}
             placeholder={tForm("accreditationComment")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.accreditationComment && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -201,6 +212,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("founder")}
             placeholder={tForm("founder")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.founder && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -214,6 +226,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("director")}
             placeholder={tForm("director")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.director && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -229,6 +242,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("publicRelationsManager")}
             placeholder={tForm("publicRelationsManager")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.publicRelationsManager && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -244,6 +258,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("parentRelationshipManager")}
             placeholder={tForm("parentRelationshipManager")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.parentRelationshipManager && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -257,6 +272,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("graduationRate")}
             placeholder={tForm("graduationRate")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.graduationRate && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -272,6 +288,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("averageNationalExamScore")}
             placeholder={tForm("averageNationalExamScore")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.averageNationalExamScore && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -285,6 +302,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("description")}
             placeholder={tForm("description")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.description && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -298,6 +316,7 @@ export default function TopLevelFields({ register, errors }: Props) {
             {...register("otherPrograms")}
             placeholder={tForm("otherPrograms")}
             className="w-full border p-2"
+            disabled={disabled}
           />
           {errors?.otherPrograms && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -306,7 +325,11 @@ export default function TopLevelFields({ register, errors }: Props) {
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col gap-1 w-full">
             <label className="block space-x-2">
-              <input type="checkbox" {...register("hasTutor")} />
+              <input
+                type="checkbox"
+                {...register("hasTutor")}
+                disabled={disabled}
+              />
               <span>{tForm("hasTutor")}</span>
             </label>
           </div>
@@ -316,6 +339,7 @@ export default function TopLevelFields({ register, errors }: Props) {
               {...register("tutorDescription")}
               placeholder={tForm("tutorDescription")}
               className="w-full border p-2"
+              disabled={disabled}
             />
             {errors?.tutorDescription && (
               <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -335,6 +359,7 @@ export default function TopLevelFields({ register, errors }: Props) {
               {...register("scholarshipsGrants")}
               placeholder={tForm("scholarshipsGrants")}
               className="w-full border p-2"
+              disabled={disabled}
             />
             {errors?.scholarshipsGrants && (
               <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -344,7 +369,11 @@ export default function TopLevelFields({ register, errors }: Props) {
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col gap-1 w-full ">
             <label className="block space-x-2">
-              <input type="checkbox" {...register("hasExchangePrograms")} />
+              <input
+                type="checkbox"
+                {...register("hasExchangePrograms")}
+                disabled={disabled}
+              />
               <span>{tForm("hasExchangePrograms")}</span>
             </label>
           </div>
@@ -354,6 +383,7 @@ export default function TopLevelFields({ register, errors }: Props) {
               {...register("exchangePrograms")}
               placeholder={tForm("exchangePrograms")}
               className="w-full border p-2"
+              disabled={disabled}
             />
             {errors?.exchangePrograms && (
               <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -363,7 +393,11 @@ export default function TopLevelFields({ register, errors }: Props) {
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col gap-1 w-full ">
             <label className="block space-x-2">
-              <input type="checkbox" {...register("hasOutdoorGarden")} />
+              <input
+                type="checkbox"
+                {...register("hasOutdoorGarden")}
+                disabled={disabled}
+              />
               <span>{tForm("hasOutdoorGarden")}</span>
             </label>
           </div>
@@ -374,6 +408,7 @@ export default function TopLevelFields({ register, errors }: Props) {
               {...register("outdoorGarden")}
               placeholder={tForm("outdoorGarden")}
               className="w-full border p-2"
+              disabled={disabled}
             />
             {errors?.outdoorGarden && (
               <p className="text-red-500 text-sm">{tForm("required")}</p>

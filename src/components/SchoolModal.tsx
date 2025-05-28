@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SchoolFormData, schoolSchema } from "../schemas/schema";
 import TopLevelFields from "./forms/TopLevelFields";
 import { toast } from "sonner";
-import { DevTool } from "@hookform/devtools";
 
 type Props = {
   school: SchoolFormData;
@@ -150,6 +149,8 @@ export default function SchoolModal({ school, mode, onClose, onSave }: Props) {
     }
   };
 
+  // inside SchoolModal.tsx (or whatever your modal file is)
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -167,6 +168,9 @@ export default function SchoolModal({ school, mode, onClose, onSave }: Props) {
   }, [onClose]);
 
   console.log(school);
+  useEffect(() => {
+    console.log("Validation errors:", errors);
+  }, [errors]);
 
   return (
     <div
@@ -174,14 +178,18 @@ export default function SchoolModal({ school, mode, onClose, onSave }: Props) {
       onClick={onClose} // <-- catch background click here
     >
       <div
-        className="bg-white p-6 w-[90%] max-h-[90%] overflow-y-auto rounded-lg"
+        className="bg-white p-6 w-[80%] max-h-[90%] overflow-y-auto rounded-lg"
         onClick={(e) => e.stopPropagation()} // <-- prevent click from bubbling
       >
         <h2>{isEdit ? "Edit" : "View"}</h2>
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TopLevelFields register={register} errors={errors} />
+            <TopLevelFields
+              disabled={!isEdit}
+              register={register}
+              errors={errors}
+            />
             <AddressSection
               disabled={!isEdit}
               register={register}
@@ -233,15 +241,14 @@ export default function SchoolModal({ school, mode, onClose, onSave }: Props) {
 
             {isEdit && (
               <button type="submit" className="mt-4">
-                Save Changes
+                {tForm("Save Changes")}
               </button>
             )}
           </form>
-          <DevTool control={control} />
         </FormProvider>
 
         <button onClick={onClose} className="mt-4">
-          Close
+          {tForm("Close")}
         </button>
       </div>
     </div>

@@ -120,10 +120,28 @@ export default function SchoolsGrid() {
     {
       headerName: tForm("actions"),
       cellRenderer: (params: { data: SchoolGridRow }) => (
-        <div style={{ display: "flex", gap: "8px" }}>
-          <button onClick={() => openModal(params.data, "view")}>View</button>
-          <button onClick={() => openModal(params.data, "edit")}>Edit</button>
-          <button onClick={() => handleDelete(params.data)}>Delete</button>
+        <div
+          tabIndex={-1}
+          className="outline-none focus:outline-none flex gap-2"
+        >
+          <button
+            onClick={() => openModal(params.data, "view")}
+            className="text-gray-400"
+          >
+            View
+          </button>
+          <button
+            onClick={() => openModal(params.data, "edit")}
+            className="text-blue-400"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDelete(params.data)}
+            className="text-red-400"
+          >
+            Delete
+          </button>
         </div>
       ),
     },
@@ -146,6 +164,7 @@ export default function SchoolsGrid() {
         columnDefs={columnDefs}
         getRowId={(params) => params.data.id}
         onGridReady={onGridReady}
+        pagination={true}
       />
 
       {modalOpen && selectedSchool && (

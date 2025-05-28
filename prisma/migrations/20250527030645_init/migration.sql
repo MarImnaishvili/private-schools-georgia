@@ -43,8 +43,8 @@ CREATE TABLE "SchoolData" (
     "establishedYear" INTEGER,
     "accreditationStatus" TEXT,
     "accreditationComment" TEXT,
-    "graduationRate" REAL,
-    "averageNationalExamScore" REAL,
+    "graduationRate" TEXT,
+    "averageNationalExamScore" TEXT,
 
     CONSTRAINT "SchoolData_pkey" PRIMARY KEY ("id")
 );
@@ -80,8 +80,8 @@ CREATE TABLE "Infrastructure" (
 CREATE TABLE "Primary" (
     "id" SERIAL NOT NULL,
     "schoolId" TEXT NOT NULL,
-    "price" DECIMAL(65,30) NOT NULL,
-    "duration" TEXT NOT NULL,
+    "price" DECIMAL(65,30),
+    "duration" TEXT,
     "discountAndPaymentTerms" TEXT,
     "numberOfStudents" INTEGER NOT NULL,
     "meals" TEXT,
@@ -101,8 +101,8 @@ CREATE TABLE "Primary" (
 CREATE TABLE "Basic" (
     "id" SERIAL NOT NULL,
     "schoolId" TEXT NOT NULL,
-    "price" DECIMAL(65,30) NOT NULL,
-    "duration" TEXT NOT NULL,
+    "price" DECIMAL(65,30),
+    "duration" TEXT,
     "discountAndPaymentTerms" TEXT,
     "numberOfStudents" INTEGER NOT NULL,
     "meals" TEXT,
@@ -122,8 +122,8 @@ CREATE TABLE "Basic" (
 CREATE TABLE "Secondary" (
     "id" SERIAL NOT NULL,
     "schoolId" TEXT NOT NULL,
-    "price" DECIMAL(65,30) NOT NULL,
-    "duration" TEXT NOT NULL,
+    "price" DECIMAL(65,30),
+    "duration" TEXT,
     "discountAndPaymentTerms" TEXT,
     "numberOfStudents" INTEGER NOT NULL,
     "meals" TEXT,

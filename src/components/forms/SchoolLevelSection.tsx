@@ -55,6 +55,17 @@ const sportsClubsOptions = [
   "gymnastics",
 ];
 
+const foreignLanguagesOptions = [
+  "German",
+  "French",
+  "Russian",
+  "Spanish",
+  "Italian",
+  "Chinese",
+  "Turkish",
+  "Japanese",
+];
+
 // multiple choice for mandatorySportsClubs and then combine as onre text.
 const textbooksPriceOptions = [
   "included in the price",
@@ -68,20 +79,39 @@ export default function SchoolLevelSection({
   control,
   disabled,
 }: Props) {
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [open, setOpen] = useState(false);
+  const sportsDropdownRef = useRef<HTMLDivElement | null>(null);
+  const languageDropdownRef = useRef<HTMLDivElement | null>(null);
+  const [openS, setOpenS] = useState(false);
+  const [openL, setOpenL] = useState(false);
   const t = useTranslations("level");
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        sportsDropdownRef.current &&
+        !sportsDropdownRef.current.contains(event.target as Node)
       ) {
-        setOpen(false);
+        setOpenS(false);
       }
     };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        languageDropdownRef.current &&
+        !languageDropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenL(false);
+      }
+    };
+
+    setOpenL(false);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -238,17 +268,61 @@ export default function SchoolLevelSection({
             </select>
           </label>
         </div>
-        <div>
-          <Label htmlFor={`levels.${level}.foreignLanguages`}>
-            {t("foreignLanguages")}
-          </Label>
 
-          <input
-            id={`levels.${level}.foreignLanguages`}
-            placeholder={t("foreignLanguages")}
-            {...register(field(level, "foreignLanguages"))}
-            className="w-full border p-2"
-            disabled={disabled}
+        <div>
+          <Controller
+            name={field(level, "foreignLanguages")}
+            control={control}
+            defaultValue=""
+            render={({ field }) => {
+              const selectedValues = field.value
+                ? field.value.toString().split(",")
+                : [];
+
+              const toggleValue = (value: string) => {
+                const newValues = selectedValues.includes(value)
+                  ? selectedValues.filter((v: string) => v !== value)
+                  : [...selectedValues, value];
+                field.onChange(newValues.join(","));
+              };
+
+              return (
+                <div
+                  className="relative inline-block w-full"
+                  ref={languageDropdownRef}
+                >
+                  {/* Trigger */}
+                  <div
+                    onClick={() => setOpenL((prev) => !prev)}
+                    className="w-full border p-2 rounded cursor-pointer bg-white"
+                  >
+                    {selectedValues.length > 0
+                      ? selectedValues.map((v: string) => t(v)).join(", ")
+                      : t("SelectForeignLanguages")}
+                  </div>
+
+                  {/* Dropdown */}
+                  {openL && (
+                    <div className="absolute z-10 mt-2 w-full border rounded bg-white shadow-md p-2 max-h-48 overflow-auto">
+                      {foreignLanguagesOptions.map((option) => (
+                        <label
+                          key={option}
+                          className="flex items-center space-x-2 py-1"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedValues.includes(option)}
+                            onChange={() => toggleValue(option)}
+                            disabled={disabled}
+                          />
+                          <span>{t(option)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }}
           />
         </div>
         <div>
@@ -282,19 +356,22 @@ export default function SchoolLevelSection({
               };
 
               return (
-                <div className="relative inline-block w-full" ref={dropdownRef}>
+                <div
+                  className="relative inline-block w-full"
+                  ref={sportsDropdownRef}
+                >
                   {/* Trigger */}
                   <div
-                    onClick={() => setOpen((prev) => !prev)}
+                    onClick={() => setOpenS((prev) => !prev)}
                     className="w-full border p-2 rounded cursor-pointer bg-white"
                   >
                     {selectedValues.length > 0
                       ? selectedValues.map((v: string) => t(v)).join(", ")
-                      : t("Select sports clubs")}
+                      : t("SelectSportsClubs")}
                   </div>
 
                   {/* Dropdown */}
-                  {open && (
+                  {openS && (
                     <div className="absolute z-10 mt-2 w-full border rounded bg-white shadow-md p-2 max-h-48 overflow-auto">
                       {sportsClubsOptions.map((option) => (
                         <label

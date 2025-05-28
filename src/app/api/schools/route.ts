@@ -36,9 +36,9 @@ export async function POST(req: Request) {
     const newSchool = await prisma.schoolData.create({
       data: {
         name: body.name,
-        phoneNumber1: body.phoneNumber1?.toString() || null,
-        phoneNumber2: body.phoneNumber2?.toString() || null,
-        phoneNumber3: body.phoneNumber3?.toString() || null,
+        phoneNumber1: body.phoneNumber1?.toString() || "",
+        phoneNumber2: body.phoneNumber2?.toString() || "",
+        phoneNumber3: body.phoneNumber3?.toString() || "",
         schoolsWebSite: body.schoolsWebSite,
         facebookProfileURL: body.facebookProfileURL,
         instagramProfileURL: body.instagramProfileURL,
@@ -49,12 +49,8 @@ export async function POST(req: Request) {
         establishedYear: body.establishedYear,
         accreditationStatus: body.accreditationStatus,
         accreditationComment: body.accreditationComment,
-        graduationRate:
-          body.graduationRate !== "" ? parseFloat(body.graduationRate) : null,
-        averageNationalExamScore:
-          body.averageNationalExamScore !== ""
-            ? parseFloat(body.averageNationalExamScore)
-            : null,
+        graduationRate: body.graduationRate,
+        averageNationalExamScore: body.averageNationalExamScore,
         description: body.description,
         hasTutor: body.hasTutor,
         tutorDescription: body.tutorDescription,
@@ -64,7 +60,7 @@ export async function POST(req: Request) {
         exchangePrograms: body.exchangePrograms,
         hasOutdoorGarden: body.hasOutdoorGarden,
         outdoorGarden: body.outdoorGarden,
-        otherPrograms: body.otherPrograms || null, // now a string column
+        otherPrograms: body.otherPrograms || "", // now a string column
         address: {
           create: {
             city: body.address.city,
@@ -105,9 +101,11 @@ export async function POST(req: Request) {
               : body.primary.mandatorySportsClubs,
 
             teachingStyleBooks: body.primary.teachingStyleBooks,
-            textbooksPrice: body.primary.textbooksPrice || null,
+            textbooksPrice: body.primary.textbooksPrice || "",
             clubsAndCircles: body.primary.clubsAndCircles,
-            foreignLanguages: body.primary.foreignLanguages,
+            foreignLanguages: Array.isArray(body.primary.foreignLanguages)
+              ? body.primary.foreignLanguages.join(",")
+              : body.primary.foreignLanguages,
             media: body.primary.schoolUniformPhotoUrls?.length
               ? {
                   create: body.primary.schoolUniformPhotoUrls.map(
@@ -134,7 +132,7 @@ export async function POST(req: Request) {
               : body.basic.mandatorySportsClubs,
 
             teachingStyleBooks: body.basic.teachingStyleBooks,
-            textbooksPrice: body.basic.textbooksPrice || null,
+            textbooksPrice: body.basic.textbooksPrice || "",
             clubsAndCircles: body.basic.clubsAndCircles,
             duration: body.basic.duration,
             foreignLanguages: body.basic.foreignLanguages,
@@ -167,7 +165,7 @@ export async function POST(req: Request) {
               : body.secondary.mandatorySportsClubs,
 
             teachingStyleBooks: body.secondary.teachingStyleBooks,
-            textbooksPrice: body.secondary.textbooksPrice || null,
+            textbooksPrice: body.secondary.textbooksPrice || "",
             clubsAndCircles: body.secondary.clubsAndCircles,
             duration: body.secondary.duration,
             media: body.secondary.schoolUniformPhotoUrls?.length

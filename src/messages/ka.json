@@ -50,7 +50,10 @@
     "inProgress": "აკრედიტაციის პროცესშია",
     "media": "ფოტო/ვიდეო",
     "required": "აუცილებელია შევსება",
-    "need to be number": "უნდა იყოს რიცხვი"
+    "need to be number": "უნდა იყოს რიცხვი",
+    "Edit": "კორექტირება",
+    "Close": "დახურვა",
+    "Save Changes": "ცვლილებების შენახვა"
   },
   "infrastructure": {
     "title": "ინფრასტრუქტურა",
@@ -102,8 +105,17 @@
     "yoga": "იოგა",
     "gymnastics": "ტანვარჯიში",
     "description": "აღწერილობა",
-    "Select sports clubs": "აირჩიე სავალდებულო სპორტული წრეები",
-    "required": "აუცილებელია შევსება"
+    "SelectSportsClubs": "აირჩიე სავალდებულო სპორტული წრეები",
+    "required": "აუცილებელია შევსება",
+    "German": "გერმანული",
+    "French": "ფრანგული",
+    "Russian": "რუსული",
+    "Spanish": "ესპანური",
+    "Italian": "იტალიური",
+    "Chinese": "ჩინური",
+    "Turkish": "თურქული",
+    "Japanese": "იაპონური",
+    "SelectForeignLanguages": "აირჩიე უცხო ენები"
   },
 
   "address": {
