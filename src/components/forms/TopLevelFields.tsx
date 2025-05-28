@@ -169,7 +169,7 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
             disabled={disabled}
           />
           {errors?.establishedYear && (
-            <p className="text-red-500 text-sm">{tForm("need to be number")}</p>
+            <p className="text-red-500 text-sm">{tForm("needToBeNumber")}</p>
           )}
         </div>
 

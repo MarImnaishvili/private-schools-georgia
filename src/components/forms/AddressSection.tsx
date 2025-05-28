@@ -14,7 +14,7 @@ const districtOptions = [
   "gldani-nadzaladevi",
   "didube-chugureti",
   "dzveli-tbilisi",
-  "tbilisis shemogareni",
+  "tbilisisShemogareni",
 ];
 
 type Props = {

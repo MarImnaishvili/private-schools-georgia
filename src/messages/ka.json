@@ -1,8 +1,8 @@
 {
   "General": {
-    "Georgian Private Schools": "კერძო სკოლები",
+    "GeorgianPrivateSchools": "კერძო სკოლები",
     "Home": "მთავარი",
-    "Create school": "სკოლის დამატება"
+    "CreateSchool": "სკოლის დამატება"
   },
   "form": {
     "id": "#",
@@ -53,7 +53,7 @@
     "need to be number": "უნდა იყოს რიცხვი",
     "Edit": "კორექტირება",
     "Close": "დახურვა",
-    "Save Changes": "ცვლილებების შენახვა"
+    "saveChanges": "ცვლილებების შენახვა"
   },
   "infrastructure": {
     "title": "ინფრასტრუქტურა",
@@ -89,10 +89,10 @@
     "textbooksPrice": "სასწავლო წიგნების ფასი",
     "booksPriceIncludes": "შეიცავს წიგნების ფასი",
     "clubsAndCircles": "წრეები და კლუბები",
-    "no meals": "არა",
-    "included in the price": "შედის ფასში",
-    "not included in the price": "არ შედის ფასში",
-    "no transportation service": "არ აქვს ტრანსპორტირენის სერვისი",
+    "noMeals": "არა",
+    "includedInThePrice": "შედის ფასში",
+    "notIncludedInThePrice": "არ შედის ფასში",
+    "noTransportationService": "არ აქვს ტრანსპორტირენის სერვისი",
     "Swimming": "ცურვა",
     "basketball": "კალადბურთი",
     "football": "ფეხბურთი",
@@ -130,14 +130,14 @@
     "gldani-nadzaladevi": "გლდანი-ნაძალადევი",
     "didube-chugureti": "დიდუბე-ჩუღურეთი",
     "dzveli-tbilisi": "ძველი-თბილისი",
-    "tbilisis shemogareni": "თბილისის შემოგარენი",
+    "tbilisisShemogareni": "თბილისის შემოგარენი",
     "required": "აუცილებელია შევსება"
   },
   "media": {
-    "Add New Media": "დაამატე ახალი ფოტო/ვიდეო",
-    "Save Media": "შენახვა",
+    "AddNewMedia": "დაამატე ახალი ფოტო/ვიდეო",
+    "SaveMedia": "შენახვა",
     "Media": "ფოტო/ვიდეო",
-    "Media URL": "ფოტო/ვიდეო URL",
+    "MediaURL": "ფოტო/ვიდეო URL",
     "Photo": "ფოტო",
     "Video": "ვიდეო",
     "School": "სკოლის შესახებ",
@@ -145,10 +145,10 @@
     "Basic": "საბაზო",
     "Secondary": "საშუალო",
     "Remove": "წაშლა",
-    "Add Media Item": "ფოტოს/ვიდეოს დამატება",
-    "Media Items": "ფოტო/ვიდეო",
+    "AddMediaItem": "ფოტოს/ვიდეოს დამატება",
+    "MediaItems": "ფოტო/ვიდეო",
     "Description": "კომენტარი",
-    "Description (optional)": "კომენტარი (სურვილისამებრ)",
+    "Description_(optional)": "კომენტარი (სურვილისამებრ)",
     "required": "აუცილებელია შევსება"
   }
 }

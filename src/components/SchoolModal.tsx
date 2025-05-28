@@ -238,14 +238,20 @@ export default function SchoolModal({ school, mode, onClose, onSave }: Props) {
             </Tabs>
 
             {isEdit && (
-              <button type="submit" className="mt-4">
-                {tForm("Save Changes")}
+              <button
+                type="submit"
+                className="mt-4 hover:text-blue-400 transition-colors hover:cursor-pointer"
+              >
+                {tForm("saveChanges")}
               </button>
             )}
           </form>
         </FormProvider>
 
-        <button onClick={onClose} className="mt-4">
+        <button
+          onClick={onClose}
+          className="mt-4 hover:text-blue-400 transition-colors hover:cursor-pointer"
+        >
           {tForm("Close")}
         </button>
       </div>

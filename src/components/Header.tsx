@@ -13,16 +13,19 @@ export default function Header() {
       <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
         <div className="flex items-center gap-6">
           <h1 className="text-lg font-bold tracking-wide whitespace-nowrap">
-            <Link href="/" className="hover:text-blue-400 transition-colors">
-              {tG("Georgian Private Schools")}
+            <Link
+              href="/"
+              className="hover:text-blue-400 transition-colors hover:cursor-pointer"
+            >
+              {tG("GeorgianPrivateSchools")}
             </Link>
           </h1>
           <nav className="flex items-center gap-4 text-sm font-medium">
             <Link
               href="/ka/schools/new"
-              className="hover:text-blue-400 transition-colors"
+              className="hover:text-blue-400  hover:cursor-pointer transition-colors"
             >
-              {tG("Create school")}
+              {tG("CreateSchool")}
             </Link>
           </nav>
         </div>
