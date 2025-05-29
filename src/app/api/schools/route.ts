@@ -1,9 +1,9 @@
 //app/api/schools/route.ts
-import { PrismaClient } from "@prisma/client";
+//import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { stringifyBigInts } from "@/lib/stringifyBigInts";
+import { prisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 export async function GET() {
   try {
@@ -17,7 +17,7 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(stringifyBigInts(schools), { status: 200 });
+    return NextResponse.json(schools, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -182,7 +182,7 @@ export async function POST(req: Request) {
         },
       },
     });
-    return NextResponse.json(stringifyBigInts(newSchool), { status: 201 });
+    return NextResponse.json(newSchool, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
