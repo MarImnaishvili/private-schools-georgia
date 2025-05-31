@@ -31,6 +31,7 @@ interface SchoolGridRow {
 
 export default function SchoolsGrid() {
   const tForm = useTranslations("form");
+  const tAddress = useTranslations("address");
   const [rowData, setRowData] = useState<SchoolGridRow[]>([]);
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<SchoolFormData | null>(
@@ -115,7 +116,7 @@ export default function SchoolsGrid() {
     {
       headerName: "#",
       valueGetter: (params) => (params.node?.rowIndex ?? 0) + 1,
-      flex: 0.5,
+      flex: 1,
     },
     {
       headerName: tForm("actions"),
@@ -143,15 +144,38 @@ export default function SchoolsGrid() {
       ),
       cellClass: "ag-no-focus-outline", // this class removes default outline
     },
-    { headerName: tForm("name"), field: "name" },
-    { headerName: tForm("phoneNumber1"), field: "phoneNumber1" },
-    { headerName: tForm("schoolsWebSite"), field: "schoolsWebSite" },
+    { headerName: tForm("name"), field: "name", filter: true },
+    { headerName: tForm("phoneNumber1"), field: "phoneNumber1", filter: true },
+    {
+      headerName: tForm("schoolsWebSite"),
+      field: "schoolsWebSite",
+      cellRenderer: (params: { data: SchoolGridRow }) => {
+        const url = params.data?.schoolsWebSite;
+        return url ? (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 underline hover:text-blue-700"
+          >
+            {url}
+          </a>
+        ) : (
+          ""
+        );
+      },
+      filter: true,
+    },
+
     {
       headerName: tForm("address"),
-      valueGetter: (params) =>
-        `${params.data?.address?.city || ""}, ${
-          params.data?.address?.district || ""
-        }`,
+      valueFormatter: ({ data }) => {
+        const city = data?.address?.city ?? "";
+        const districtKey = data?.address?.district ?? "";
+        const districtTranslated = tAddress(districtKey);
+        return `${city}, ${districtTranslated}`;
+      },
+      filter: true,
     },
   ];
 
@@ -179,8 +203,6 @@ export default function SchoolsGrid() {
 
 async function fetchFullSchoolById(id: string): Promise<SchoolFormData> {
   const res = await fetch(`/api/schools/${id}`);
-  const text = await res.text();
-  return JSON.parse(text);
   if (!res.ok) throw new Error(`Failed to fetch school with ID ${id}`);
-  return res.json();
+  return await res.json(); // ✅ Only return once
 }
