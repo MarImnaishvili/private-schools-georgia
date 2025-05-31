@@ -118,9 +118,10 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
           <input
             id="schoolsWebSite"
             {...register("schoolsWebSite")}
-            placeholder={tForm("schoolsWebSite")}
+            placeholder="https://example.com"
             className="w-full border p-2"
             disabled={disabled}
+            type="url"
           />
           {errors?.schoolsWebSite && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -134,9 +135,10 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
           <input
             id="facebookProfileURL"
             {...register("facebookProfileURL")}
-            placeholder={tForm("facebookProfileURL")}
+            placeholder="https://example.com"
             className="w-full border p-2"
             disabled={disabled}
+            type="url"
           />
           {errors?.facebookProfileURL && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
@@ -150,9 +152,10 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
           <input
             id="instagramProfileURL"
             {...register("instagramProfileURL")}
-            placeholder={tForm("instagramProfileURL")}
+            placeholder="https://example.com"
             className="w-full border p-2"
             disabled={disabled}
+            type="url"
           />
           {errors?.instagramProfileURL && (
             <p className="text-red-500 text-sm">{tForm("required")}</p>
