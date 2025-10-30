@@ -46,7 +46,7 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
         </div>
         <div className="flex flex-col gap-4">
           {/* Phone Number 1 */}
-          <div className="flex flex-row items-end gap-2 w-full max-w-md">
+          <div className="flex flex-row items-end gap-2 w-full max-w-2xl">
             <div className="flex flex-col gap-1 w-full">
               <Label htmlFor="phoneNumber1">{tForm("phoneNumber1")}</Label>
               <input
@@ -71,7 +71,7 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
 
           {/* Phone Number 2 */}
           {addPhoneNumber && (
-            <div className="flex flex-row items-end gap-2 w-full max-w-md">
+            <div className="flex flex-row items-end gap-2 w-full max-w-2xl">
               <div className="flex flex-col gap-1 w-full">
                 <Label htmlFor="phoneNumber2">{tForm("phoneNumber2")}</Label>
                 <input
@@ -97,7 +97,7 @@ export default function TopLevelFields({ register, errors, disabled }: Props) {
 
           {/* Phone Number 3 */}
           {addMorePhoneNumber && (
-            <div className="flex flex-col gap-1 w-full max-w-md">
+            <div className="flex flex-col gap-1 w-full max-w-2xl">
               <Label htmlFor="phoneNumber3">{tForm("phoneNumber3")}</Label>
               <input
                 id="phoneNumber3"

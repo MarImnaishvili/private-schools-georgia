@@ -1,14 +1,17 @@
 //app/[locale]/schools/new/page
 "use client";
 
+import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import TopLevelFields from "@/components/forms/TopLevelFields";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AddressSection from "@/components/forms/AddressSection";
 import InfrastructureSection from "@/components/forms/InfrastructureSection";
 import SchoolLevelSection from "@/components/forms/SchoolLevelSection";
+import FormErrorSummary from "@/components/forms/FormErrorSummary";
 import { schoolSchema, SchoolFormData } from "@/schemas/schema";
 
 const defaultschoolLevel = {
@@ -74,6 +77,7 @@ const defaultschoolValues = {
 
 export default function NewSchoolPage() {
   const tForm = useTranslations("form");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -87,22 +91,37 @@ export default function NewSchoolPage() {
   });
 
   const onSubmit = async (data: SchoolFormData) => {
-    const response = await fetch("/api/schools", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (response.ok) {
-      alert(tForm("schoolCreated"));
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/schools", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create school");
+      }
+
+      toast.success(tForm("schoolCreated"));
       reset(); // <-- reset the form to default values
-    } else {
-      alert(tForm("errorCreatingSchool"));
+    } catch (error) {
+      console.error("Error creating school:", error);
+      toast.error(tForm("errorCreatingSchool"));
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const onInvalid = () => {
+    const errorCount = Object.keys(errors).length;
+    toast.error(`${tForm("validationErrorsToast")}: ${errorCount}`);
   };
 
   return (
     <div className="p-9 mt-8 max-w-4xl mx-auto">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+        <FormErrorSummary errors={errors} />
         <TopLevelFields register={register} errors={errors} />
         <AddressSection register={register} errors={errors} />
         <InfrastructureSection register={register} errors={errors} />
@@ -143,9 +162,32 @@ export default function NewSchoolPage() {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hover:cursor-pointer transition-colors"
+          disabled={isSubmitting}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
         >
-          {tForm("submit")}
+          {isSubmitting && (
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          )}
+          {isSubmitting ? tForm("submitting") : tForm("submit")}
         </button>
       </form>
     </div>

@@ -7,15 +7,9 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { SchoolFormData } from "@/schemas/schema";
 import { Card, CardContent } from "../ui/Card";
 import { Label } from "../ui/Label";
+import { DISTRICTS } from "@/constants";
 
-const districtOptions = [
-  "vake-saburtalo",
-  "isani-samgori",
-  "gldani-nadzaladevi",
-  "didube-chugureti",
-  "dzveli-tbilisi",
-  "tbilisisShemogareni",
-];
+const districtOptions = DISTRICTS;
 
 type Props = {
   register: UseFormRegister<SchoolFormData>;

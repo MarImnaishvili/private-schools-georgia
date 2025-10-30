@@ -1,13 +1,45 @@
 //app/api/schools/route.ts
-//import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { schoolSchema } from "@/schemas/schema";
+import { ZodError } from "zod";
+import { sanitizeString, sanitizeUrl, sanitizePhone } from "@/lib/sanitize";
 
-//const prisma = new PrismaClient();
-
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+
+    // Check if pagination is requested
+    const pageParam = searchParams.get("page");
+    const pageSizeParam = searchParams.get("pageSize");
+
+    // If no pagination params, return all schools (for grid client-side pagination)
+    if (!pageParam && !pageSizeParam) {
+      const schools = await prisma.schoolData.findMany({
+        include: {
+          address: true,
+          infrastructure: true,
+          primary: { include: { media: true } },
+          basic: { include: { media: true } },
+          secondary: { include: { media: true } },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      return NextResponse.json(schools, { status: 200 });
+    }
+
+    // Server-side pagination (for future use)
+    const page = parseInt(pageParam || "1");
+    const pageSize = parseInt(pageSizeParam || "50");
+    const skip = (page - 1) * pageSize;
+    const totalCount = await prisma.schoolData.count();
+
     const schools = await prisma.schoolData.findMany({
+      skip,
+      take: pageSize,
       include: {
         address: true,
         infrastructure: true,
@@ -15,17 +47,29 @@ export async function GET() {
         basic: { include: { media: true } },
         secondary: { include: { media: true } },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
-    return NextResponse.json(schools, { status: 200 });
+    return NextResponse.json({
+      data: schools,
+      pagination: {
+        page,
+        pageSize,
+        totalCount,
+        totalPages: Math.ceil(totalCount / pageSize),
+      },
+    }, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("GET /api/schools error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch schools" },
+      {
+        error: "Failed to fetch schools",
+        details: error instanceof Error ? error.message : "Unknown error"
+      },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -33,15 +77,18 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    // Validate request body with Zod
+    const validatedData = schoolSchema.parse(body);
+
     const newSchool = await prisma.schoolData.create({
       data: {
-        name: body.name,
-        phoneNumber1: body.phoneNumber1?.toString() || "",
-        phoneNumber2: body.phoneNumber2?.toString() || "",
-        phoneNumber3: body.phoneNumber3?.toString() || "",
-        schoolsWebSite: body.schoolsWebSite,
-        facebookProfileURL: body.facebookProfileURL,
-        instagramProfileURL: body.instagramProfileURL,
+        name: sanitizeString(validatedData.name),
+        phoneNumber1: sanitizePhone(body.phoneNumber1?.toString()),
+        phoneNumber2: sanitizePhone(body.phoneNumber2?.toString()),
+        phoneNumber3: sanitizePhone(body.phoneNumber3?.toString()),
+        schoolsWebSite: sanitizeUrl(body.schoolsWebSite),
+        facebookProfileURL: sanitizeUrl(body.facebookProfileURL),
+        instagramProfileURL: sanitizeUrl(body.instagramProfileURL),
         founder: body.founder,
         director: body.director,
         publicRelationsManager: body.publicRelationsManager,
@@ -184,12 +231,29 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(newSchool, { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.error("POST /api/schools error:", error);
+
+    // Handle Zod validation errors
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        {
+          error: "Validation failed",
+          details: error.errors.map(err => ({
+            field: err.path.join("."),
+            message: err.message
+          }))
+        },
+        { status: 400 }
+      );
+    }
+
+    // Handle other errors
     return NextResponse.json(
-      { error: "Failed to create school" },
+      {
+        error: "Failed to create school",
+        details: error instanceof Error ? error.message : "Unknown error"
+      },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect(); // cleanly disconnect after query
   }
 }

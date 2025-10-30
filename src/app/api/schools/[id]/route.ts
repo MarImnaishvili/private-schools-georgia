@@ -1,12 +1,52 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/api/schools/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { sanitizeString, sanitizeUrl, sanitizePhone } from "@/lib/sanitize";
 
 const uuidSchema = z.string().uuid();
 
-function transformNestedUpdates(data: any) {
+interface NestedUpdateData {
+  address?: Record<string, unknown>;
+  infrastructure?: Record<string, unknown>;
+  primary?: Record<string, unknown>;
+  basic?: Record<string, unknown>;
+  secondary?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+function sanitizeSchoolData(data: NestedUpdateData): NestedUpdateData {
+  const sanitized: NestedUpdateData = {};
+
+  // Sanitize top-level string fields
+  if (data.name !== undefined) sanitized.name = sanitizeString(String(data.name));
+  if (data.phoneNumber1 !== undefined) sanitized.phoneNumber1 = sanitizePhone(String(data.phoneNumber1));
+  if (data.phoneNumber2 !== undefined) sanitized.phoneNumber2 = sanitizePhone(String(data.phoneNumber2));
+  if (data.phoneNumber3 !== undefined) sanitized.phoneNumber3 = sanitizePhone(String(data.phoneNumber3));
+  if (data.schoolsWebSite !== undefined) sanitized.schoolsWebSite = sanitizeUrl(String(data.schoolsWebSite));
+  if (data.facebookProfileURL !== undefined) sanitized.facebookProfileURL = sanitizeUrl(String(data.facebookProfileURL));
+  if (data.instagramProfileURL !== undefined) sanitized.instagramProfileURL = sanitizeUrl(String(data.instagramProfileURL));
+  if (data.description !== undefined) sanitized.description = sanitizeString(String(data.description));
+
+  // Copy other fields as-is (numbers, booleans, etc.)
+  const fieldsToSkip = ['name', 'phoneNumber1', 'phoneNumber2', 'phoneNumber3', 'schoolsWebSite', 'facebookProfileURL', 'instagramProfileURL', 'description', 'address', 'infrastructure', 'primary', 'basic', 'secondary'];
+  Object.keys(data).forEach(key => {
+    if (!fieldsToSkip.includes(key)) {
+      sanitized[key] = data[key];
+    }
+  });
+
+  // Copy nested objects
+  if (data.address) sanitized.address = data.address;
+  if (data.infrastructure) sanitized.infrastructure = data.infrastructure;
+  if (data.primary) sanitized.primary = data.primary;
+  if (data.basic) sanitized.basic = data.basic;
+  if (data.secondary) sanitized.secondary = data.secondary;
+
+  return sanitized;
+}
+
+function transformNestedUpdates(data: NestedUpdateData) {
   const { address, infrastructure, primary, basic, secondary, ...rest } = data;
 
   return {
@@ -55,7 +95,8 @@ export async function PUT(req: NextRequest) {
 
     const validId = uuidSchema.parse(id);
     const data = await req.json();
-    const transformedData = transformNestedUpdates(data);
+    const sanitizedData = sanitizeSchoolData(data);
+    const transformedData = transformNestedUpdates(sanitizedData);
 
     const updated = await prisma.schoolData.update({
       where: { id: validId },

@@ -14,6 +14,12 @@ import { SchoolLevelKey, SchoolLevelFields } from "@/types/formData";
 import { SchoolFormData } from "@/schemas/schema";
 import { Card, CardContent } from "../ui/Card";
 import { Label } from "../ui/Label";
+import {
+  MEAL_OPTIONS,
+  TRANSPORTATION_OPTIONS,
+  SPORTS_CLUBS,
+  FOREIGN_LANGUAGES,
+} from "@/constants";
 
 type Props = {
   level: SchoolLevelKey;
@@ -29,38 +35,10 @@ const field = <T extends SchoolLevelKey, K extends keyof SchoolLevelFields>(
   key: K
 ): Path<SchoolFormData> => `${level}.${key}` as Path<SchoolFormData>;
 
-const mealsOptions = ["noMeals", "includedInThePrice", "notIncludedInThePrice"];
-
-const transportationOptions = [
-  "noTransportationService",
-  "includedInThePrice",
-  "notIncludedInThePrice",
-];
-
-const sportsClubsOptions = [
-  "Swimming",
-  "basketball",
-  "football",
-  "chess",
-  "karate",
-  "volleyball",
-  "tennis",
-  "wrestling",
-  "judo",
-  "yoga",
-  "gymnastics",
-];
-
-const foreignLanguagesOptions = [
-  "German",
-  "French",
-  "Russian",
-  "Spanish",
-  "Italian",
-  "Chinese",
-  "Turkish",
-  "Japanese",
-];
+const mealsOptions = MEAL_OPTIONS;
+const transportationOptions = TRANSPORTATION_OPTIONS;
+const sportsClubsOptions = SPORTS_CLUBS;
+const foreignLanguagesOptions = FOREIGN_LANGUAGES;
 
 // multiple choice for mandatorySportsClubs and then combine as onre text.
 const textbooksPriceOptions = ["includedInThePrice", "notIncludedInThePrice"];
