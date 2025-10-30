@@ -23,6 +23,8 @@ interface SchoolGridRow {
   id: string;
   name?: string;
   phoneNumber1?: string;
+  phoneNumber2?: string;
+  phoneNumber3?: string;
   schoolsWebSite?: string;
   establishedYear?: number;
   address: {
@@ -70,6 +72,8 @@ export default function SchoolsGrid() {
         id: school.id!,
         name: school.name,
         phoneNumber1: school.phoneNumber1,
+        phoneNumber2: school.phoneNumber2,
+        phoneNumber3: school.phoneNumber3,
         schoolsWebSite: school.schoolsWebSite,
         establishedYear: school.establishedYear,
         address: {
@@ -121,10 +125,15 @@ export default function SchoolsGrid() {
       }
       const districtMatch = districtKey.includes(query) || districtTranslated.includes(query);
 
-      // Phone number matching: compare digits only
+      // Phone number matching: compare digits only across all three phone numbers
+      const phone1Digits = school.phoneNumber1 ? school.phoneNumber1.replace(/\D/g, "") : "";
+      const phone2Digits = school.phoneNumber2 ? school.phoneNumber2.replace(/\D/g, "") : "";
+      const phone3Digits = school.phoneNumber3 ? school.phoneNumber3.replace(/\D/g, "") : "";
+
       const phoneMatch =
-        (school.phoneNumber1 && school.phoneNumber1.replace(/\D/g, "").includes(digitsOnly)) ||
-        false;
+        (digitsOnly && phone1Digits.includes(digitsOnly)) ||
+        (digitsOnly && phone2Digits.includes(digitsOnly)) ||
+        (digitsOnly && phone3Digits.includes(digitsOnly));
 
       return nameMatch || cityMatch || districtMatch || phoneMatch;
     });
@@ -246,6 +255,8 @@ export default function SchoolsGrid() {
       id: updatedSchool.id!,
       name: updatedSchool.name,
       phoneNumber1: updatedSchool.phoneNumber1,
+      phoneNumber2: updatedSchool.phoneNumber2,
+      phoneNumber3: updatedSchool.phoneNumber3,
       schoolsWebSite: updatedSchool.schoolsWebSite,
       address: {
         city: updatedSchool.address?.city ?? "",
