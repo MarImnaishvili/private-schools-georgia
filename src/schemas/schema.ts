@@ -1,27 +1,6 @@
 // schemas/schema.ts
 
 import { z } from "zod";
-import { formatGeorgianPhoneNumber, isValidGeorgianPhone } from "@/lib/phoneUtils";
-
-// Custom phone number validation and transformation
-const phoneNumberSchema = z
-  .string()
-  .optional()
-  .refine(
-    (val) => {
-      // Allow empty strings
-      if (!val || val.trim() === "") return true;
-      // Validate that it's a valid Georgian phone number
-      return isValidGeorgianPhone(val);
-    },
-    {
-      message: "Please enter a valid Georgian phone number (e.g., 595 12 34 56 or +995 595 12 34 56)",
-    }
-  )
-  .transform((val) => {
-    if (!val || val.trim() === "") return "";
-    return formatGeorgianPhoneNumber(val);
-  });
 
 // Define school level section schema
 const schoolLevelSchema = z.object({
@@ -44,9 +23,9 @@ const schoolLevelSchema = z.object({
 export const schoolSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1).optional(),
-  phoneNumber1: phoneNumberSchema,
-  phoneNumber2: phoneNumberSchema,
-  phoneNumber3: phoneNumberSchema,
+  phoneNumber1: z.string().optional(),
+  phoneNumber2: z.string().optional(),
+  phoneNumber3: z.string().optional(),
   schoolsWebSite: z.string().url().optional().or(z.literal("")),
   facebookProfileURL: z.string().url().optional().or(z.literal("")),
   instagramProfileURL: z.string().url().optional().or(z.literal("")),
