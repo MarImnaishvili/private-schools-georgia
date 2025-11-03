@@ -34,8 +34,8 @@ export default function LoginPage() {
         router.push(`/${locale}/dashboard`);
         router.refresh();
       }
-    } catch (error: any) {
-      setError(error.message || "An error occurred during login");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "An error occurred during login");
     } finally {
       setLoading(false);
     }

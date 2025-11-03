@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 
@@ -25,6 +25,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<UserRole>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+
+  const fetchUserRole = useCallback(async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .single();
+
+      if (error) {
+        // Silently handle - users may not have roles assigned yet
+        setRole(null);
+      } else {
+        setRole(data?.role as UserRole);
+      }
+    } catch {
+      // Silently handle errors when user has no role assigned yet
+      setRole(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [supabase]);
 
   useEffect(() => {
     // Get initial session
@@ -51,29 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
-
-  const fetchUserRole = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .single();
-
-      if (error) {
-        // Silently handle - users may not have roles assigned yet
-        setRole(null);
-      } else {
-        setRole(data?.role as UserRole);
-      }
-    } catch (error) {
-      // Silently handle errors when user has no role assigned yet
-      setRole(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [supabase.auth, fetchUserRole]);
 
   const signOut = async () => {
     await supabase.auth.signOut();

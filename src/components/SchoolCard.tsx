@@ -1,10 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-
 interface SchoolCardProps {
-  id: string;
   name: string;
   city: string;
   district: string;
@@ -12,13 +8,11 @@ interface SchoolCardProps {
 }
 
 export default function SchoolCard({
-  id,
   name,
   city,
   district,
   phoneNumber1,
 }: SchoolCardProps) {
-  const t = useTranslations("form");
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-200">

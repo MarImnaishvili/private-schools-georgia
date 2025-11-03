@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -15,7 +14,6 @@ export default function EmployeeRegistrationPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
   const t = useTranslations("auth");
   const { role: currentUserRole, loading: authLoading } = useAuth();
 
@@ -72,10 +70,11 @@ export default function EmployeeRegistrationPage() {
       setPassword("");
       setConfirmPassword("");
       setRole("employee");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error creating employee:", error);
-      setError(error.message || t("errorCreatingEmployee"));
-      toast.error(error.message || t("errorCreatingEmployee"));
+      const errorMessage = error instanceof Error ? error.message : t("errorCreatingEmployee");
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

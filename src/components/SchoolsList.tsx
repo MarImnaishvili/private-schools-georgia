@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 
 interface School {
   id: string;
@@ -10,27 +9,25 @@ interface School {
   phoneNumber1: string | null;
   schoolsWebSite: string | null;
   address: {
-    city: string;
-    district: string;
+    city: string | null;
+    district: string | null;
   } | null;
   primary: {
-    price: number;
+    price: number | null;
   } | null;
   basic: {
-    price: number;
+    price: number | null;
   } | null;
   secondary: {
-    price: number;
+    price: number | null;
   } | null;
 }
 
 interface SchoolsListProps {
   schools: School[];
-  locale: string;
 }
 
-export default function SchoolsList({ schools, locale }: SchoolsListProps) {
-  const tAuth = useTranslations("auth");
+export default function SchoolsList({ schools }: SchoolsListProps) {
   const tForm = useTranslations("form");
   const tAddress = useTranslations("address");
 
@@ -43,12 +40,12 @@ export default function SchoolsList({ schools, locale }: SchoolsListProps) {
 
   // Get unique cities and districts for filters
   const cities = useMemo(() => {
-    const citySet = new Set(schools.map(s => s.address?.city).filter(Boolean));
+    const citySet = new Set(schools.map(s => s.address?.city).filter((city): city is string => Boolean(city)));
     return Array.from(citySet).sort();
   }, [schools]);
 
   const districts = useMemo(() => {
-    const districtSet = new Set(schools.map(s => s.address?.district).filter(Boolean));
+    const districtSet = new Set(schools.map(s => s.address?.district).filter((district): district is string => Boolean(district)));
     return Array.from(districtSet).sort();
   }, [schools]);
 

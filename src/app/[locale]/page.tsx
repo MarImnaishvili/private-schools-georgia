@@ -56,7 +56,7 @@ export default async function HomePage({
       </div>
 
       {/* Schools List with Filters */}
-      <SchoolsList schools={schools} locale={locale} />
+      <SchoolsList schools={schools} />
     </div>
   );
 }

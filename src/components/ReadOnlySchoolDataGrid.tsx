@@ -10,7 +10,6 @@ import {
   AllCommunityModule,
 } from "ag-grid-community";
 import { useTranslations } from "next-intl";
-import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
 import SchoolModal from "./SchoolModal";
 import { SchoolFormData } from "../schemas/schema";
@@ -36,9 +35,6 @@ interface SchoolGridRow {
 export default function ReadOnlySchoolsGrid() {
   const tForm = useTranslations("form");
   const tAddress = useTranslations("address");
-  const router = useRouter();
-  const params = useParams();
-  const locale = params.locale as string || "en";
   const [rowData, setRowData] = useState<SchoolGridRow[]>([]);
   const [filteredRowData, setFilteredRowData] = useState<SchoolGridRow[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
