@@ -13,12 +13,10 @@ import { useTranslations } from "next-intl";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
 import SchoolModal from "./SchoolModal";
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import { SchoolFormData } from "../schemas/schema";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-// ✅ Only lightweight fields for grid
 interface SchoolGridRow {
   id: string;
   name?: string;
@@ -35,7 +33,7 @@ interface SchoolGridRow {
   };
 }
 
-export default function SchoolsGrid() {
+export default function ReadOnlySchoolsGrid() {
   const tForm = useTranslations("form");
   const tAddress = useTranslations("address");
   const router = useRouter();
@@ -49,12 +47,8 @@ export default function SchoolsGrid() {
     null
   );
   const [modalOpen, setModalOpen] = useState(false);
-  const [mode, setMode] = useState<"view" | "edit">("view");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [schoolToDelete, setSchoolToDelete] = useState<SchoolGridRow | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isFetchingSchool, setIsFetchingSchool] = useState(false);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(0);
 
@@ -108,14 +102,12 @@ export default function SchoolsGrid() {
     }
 
     const query = searchQuery.toLowerCase();
-    // Remove all non-digit characters from search query for phone number matching
     const digitsOnly = query.replace(/\D/g, "");
 
     const filtered = rowData.filter((school) => {
       const nameMatch = school.name?.toLowerCase().includes(query);
       const cityMatch = school.address.city.toLowerCase().includes(query);
 
-      // Match against both the district key AND the translated district name
       const districtKey = school.address.district.toLowerCase();
       let districtTranslated = "";
       try {
@@ -127,7 +119,6 @@ export default function SchoolsGrid() {
       }
       const districtMatch = districtKey.includes(query) || districtTranslated.includes(query);
 
-      // Phone number matching: compare digits only across all three phone numbers
       const phone1Digits = school.phoneNumber1 ? school.phoneNumber1.replace(/\D/g, "") : "";
       const phone2Digits = school.phoneNumber2 ? school.phoneNumber2.replace(/\D/g, "") : "";
       const phone3Digits = school.phoneNumber3 ? school.phoneNumber3.replace(/\D/g, "") : "";
@@ -143,15 +134,10 @@ export default function SchoolsGrid() {
     setFilteredRowData(filtered);
   }, [searchQuery, rowData, tAddress]);
 
-  // Keyboard navigation for grid
+  // Keyboard navigation for grid - only view mode
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Only handle keyboard navigation if not typing in search box or modal is open
-      if (
-        modalOpen ||
-        deleteModalOpen ||
-        document.activeElement?.tagName === "INPUT"
-      ) {
+      if (modalOpen || document.activeElement?.tagName === "INPUT") {
         return;
       }
 
@@ -162,7 +148,6 @@ export default function SchoolsGrid() {
           e.preventDefault();
           setSelectedRowIndex((prev) => {
             const newIndex = Math.min(prev + 1, maxIndex);
-            // Scroll selected row into view
             setTimeout(() => {
               const selectedNode = gridApi?.getDisplayedRowAtIndex(newIndex);
               if (selectedNode) {
@@ -176,7 +161,6 @@ export default function SchoolsGrid() {
           e.preventDefault();
           setSelectedRowIndex((prev) => {
             const newIndex = Math.max(prev - 1, 0);
-            // Scroll selected row into view
             setTimeout(() => {
               const selectedNode = gridApi?.getDisplayedRowAtIndex(newIndex);
               if (selectedNode) {
@@ -189,14 +173,7 @@ export default function SchoolsGrid() {
         case "Enter":
           e.preventDefault();
           if (filteredRowData[selectedRowIndex]) {
-            openModal(filteredRowData[selectedRowIndex], "view");
-          }
-          break;
-        case "e":
-        case "E":
-          e.preventDefault();
-          if (filteredRowData[selectedRowIndex]) {
-            openModal(filteredRowData[selectedRowIndex], "edit");
+            openModal(filteredRowData[selectedRowIndex]);
           }
           break;
       }
@@ -204,82 +181,17 @@ export default function SchoolsGrid() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [
-    selectedRowIndex,
-    filteredRowData,
-    modalOpen,
-    deleteModalOpen,
-    gridApi,
-  ]);
+  }, [selectedRowIndex, filteredRowData, modalOpen, gridApi]);
 
   const onGridReady = (params: GridReadyEvent) => {
     setGridApi(params.api);
   };
 
-  const openDeleteModal = (school: SchoolGridRow) => {
-    setSchoolToDelete(school);
-    setDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setDeleteModalOpen(false);
-    setSchoolToDelete(null);
-    setIsDeleting(false);
-  };
-
-  const handleDelete = async () => {
-    if (!schoolToDelete) return;
-
-    try {
-      setIsDeleting(true);
-      const response = await fetch(`/api/schools/${schoolToDelete.id}`, { method: "DELETE" });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete school");
-      }
-
-      const nodeToDelete = gridApi?.getRowNode(schoolToDelete.id);
-      if (nodeToDelete) {
-        gridApi!.applyTransaction({ remove: [schoolToDelete] });
-      }
-
-      toast.success(`${schoolToDelete.name} deleted successfully`);
-      closeDeleteModal();
-    } catch (error) {
-      console.error("Failed to delete school", error);
-      toast.error("Failed to delete school. Please try again.");
-      setIsDeleting(false);
-    }
-  };
-
-  const updateRowData = (updatedSchool: SchoolFormData) => {
-    const updatedGridRow: SchoolGridRow = {
-      id: updatedSchool.id!,
-      name: updatedSchool.name,
-      phoneNumber1: updatedSchool.phoneNumber1,
-      phoneNumber2: updatedSchool.phoneNumber2,
-      phoneNumber3: updatedSchool.phoneNumber3,
-      schoolsWebSite: updatedSchool.schoolsWebSite,
-      address: {
-        city: updatedSchool.address?.city ?? "",
-        district: updatedSchool.address?.district ?? "",
-        street: updatedSchool.address?.street ?? "",
-        zipCode: updatedSchool.address?.zipCode ?? "",
-      },
-    };
-
-    const node = gridApi?.getRowNode(updatedGridRow.id);
-    if (node) {
-      node.setData(updatedGridRow);
-    }
-  };
-
-  const openModal = async (school: SchoolGridRow, mode: "view" | "edit") => {
+  const openModal = async (school: SchoolGridRow) => {
     try {
       setIsFetchingSchool(true);
       const fullData = await fetchFullSchoolById(school.id);
       setSelectedSchool(fullData);
-      setMode(mode);
       setModalOpen(true);
     } catch (error) {
       console.error("Error fetching school:", error);
@@ -299,32 +211,20 @@ export default function SchoolsGrid() {
     },
     {
       headerName: tForm("actions"),
-      width: 180,
+      width: 100,
       resizable: false,
       sortable: false,
       cellRenderer: (params: { data: SchoolGridRow }) => (
-        <div className="flex gap-2 ">
+        <div className="flex gap-2">
           <button
-            onClick={() => openModal(params.data, "view")}
-            className="text-gray-400 hover:text-gray-800 transition-colors focus:outline-none"
+            onClick={() => openModal(params.data)}
+            className="text-blue-400 hover:text-blue-800 transition-colors focus:outline-none"
           >
             {tForm("view")}
           </button>
-          <button
-            onClick={() => openModal(params.data, "edit")}
-            className="text-blue-400 hover:text-blue-800 transition-colors focus:outline-none"
-          >
-            {tForm("edit")}
-          </button>
-          <button
-            onClick={() => openDeleteModal(params.data)}
-            className="text-red-400 hover:text-red-800 transition-colors focus:outline-none"
-          >
-            {tForm("delete")}
-          </button>
         </div>
       ),
-      cellClass: "ag-no-focus-outline", // this class removes default outline
+      cellClass: "ag-no-focus-outline",
     },
     {
       headerName: tForm("name"),
@@ -375,7 +275,6 @@ export default function SchoolsGrid() {
       },
       filter: true,
     },
-
     {
       headerName: tForm("address"),
       sortable: true,
@@ -385,12 +284,11 @@ export default function SchoolsGrid() {
       valueFormatter: ({ data }) => {
         const city = data?.address?.city ?? "";
         const districtKey = data?.address?.district ?? "";
-        // Only translate if district exists in translations
         try {
           const districtTranslated = districtKey ? tAddress(districtKey) : "";
           return districtTranslated ? `${city}, ${districtTranslated}` : city;
         } catch {
-          return city; // Fallback if translation key doesn't exist
+          return city;
         }
       },
       filter: true,
@@ -424,7 +322,6 @@ export default function SchoolsGrid() {
     );
   }
 
-  // Empty state: No schools at all
   if (!loading && rowData.length === 0) {
     return (
       <div className="mt-12 w-full mx-auto px-4">
@@ -448,79 +345,38 @@ export default function SchoolsGrid() {
           <p className="text-lg text-gray-600 mb-8 max-w-2xl">
             {tForm("noSchoolsMessage")}
           </p>
-          <button
-            onClick={() => router.push(`/${locale}/schools/new`)}
-            className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium text-base"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            {tForm("createFirstSchool")}
-          </button>
         </div>
       </div>
     );
   }
 
-  // Empty state: Search returns no results
   const showNoSearchResults = searchQuery && filteredRowData.length === 0;
 
   return (
     <div className="mt-12 max-w-5xl mx-auto">
-      <div className="mb-4 flex gap-4 items-start">
-        <div className="flex-1">
-          <label htmlFor="school-search" className="sr-only">
-            {tForm("searchPlaceholder")}
-          </label>
-          <input
-            id="school-search"
-            type="text"
-            placeholder={tForm("searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            aria-label={tForm("searchPlaceholder")}
-          />
-          {searchQuery && (
-            <p className="mt-2 text-sm text-gray-600" role="status" aria-live="polite">
-              {tForm("searchResults")}: {filteredRowData.length}
-            </p>
-          )}
-          {!showNoSearchResults && (
-            <p className="mt-2 text-xs text-gray-500 italic">
-              {tForm("keyboardShortcuts")}
-            </p>
-          )}
-        </div>
-        <button
-          onClick={() => router.push(`/${locale}/schools/new`)}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium whitespace-nowrap"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          {tForm("addNewSchool")}
-        </button>
+      <div className="mb-4">
+        <label htmlFor="school-search" className="sr-only">
+          {tForm("searchPlaceholder")}
+        </label>
+        <input
+          id="school-search"
+          type="text"
+          placeholder={tForm("searchPlaceholder")}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          aria-label={tForm("searchPlaceholder")}
+        />
+        {searchQuery && (
+          <p className="mt-2 text-sm text-gray-600" role="status" aria-live="polite">
+            {tForm("searchResults")}: {filteredRowData.length}
+          </p>
+        )}
+        {!showNoSearchResults && (
+          <p className="mt-2 text-xs text-gray-500 italic">
+            Keyboard shortcuts: ↑↓ Navigate • Enter View
+          </p>
+        )}
       </div>
 
       {showNoSearchResults ? (
@@ -553,25 +409,25 @@ export default function SchoolsGrid() {
         </div>
       ) : (
         <div className="ag-theme-alpine h-screen" role="region" aria-label="Schools data grid">
-        <AgGridReact
-          rowData={filteredRowData}
-          columnDefs={columnDefs}
-          getRowId={(params) => params.data.id}
-          onGridReady={onGridReady}
-          pagination={true}
-          paginationPageSize={20}
-          paginationPageSizeSelector={[20, 50, 100]}
-          getRowStyle={(params) => {
-            if (params.node.rowIndex === selectedRowIndex) {
-              return {
-                background: "#dbeafe",
-                borderLeft: "3px solid #3b82f6",
-                fontWeight: "500",
-              };
-            }
-            return undefined;
-          }}
-        />
+          <AgGridReact
+            rowData={filteredRowData}
+            columnDefs={columnDefs}
+            getRowId={(params) => params.data.id}
+            onGridReady={onGridReady}
+            pagination={true}
+            paginationPageSize={20}
+            paginationPageSizeSelector={[20, 50, 100]}
+            getRowStyle={(params) => {
+              if (params.node.rowIndex === selectedRowIndex) {
+                return {
+                  background: "#dbeafe",
+                  borderLeft: "3px solid #3b82f6",
+                  fontWeight: "500",
+                };
+              }
+              return undefined;
+            }}
+          />
         </div>
       )}
 
@@ -606,19 +462,11 @@ export default function SchoolsGrid() {
       {modalOpen && selectedSchool && (
         <SchoolModal
           school={selectedSchool}
-          mode={mode}
+          mode="view"
           onClose={() => setModalOpen(false)}
-          onSave={updateRowData}
+          onSave={() => {}}
         />
       )}
-
-      <DeleteConfirmationModal
-        isOpen={deleteModalOpen}
-        schoolName={schoolToDelete?.name || ""}
-        onConfirm={handleDelete}
-        onCancel={closeDeleteModal}
-        isDeleting={isDeleting}
-      />
     </div>
   );
 }
@@ -626,5 +474,5 @@ export default function SchoolsGrid() {
 async function fetchFullSchoolById(id: string): Promise<SchoolFormData> {
   const res = await fetch(`/api/schools/${id}`);
   if (!res.ok) throw new Error(`Failed to fetch school with ID ${id}`);
-  return await res.json(); // ✅ Only return once
+  return await res.json();
 }

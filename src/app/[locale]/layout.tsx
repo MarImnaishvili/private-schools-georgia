@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
 import Header from "@/components/Header";
+import { AuthProvider } from "@/contexts/AuthContext";
 import "../globals.css";
 
 type Props = {
@@ -14,12 +15,14 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <div className="flex flex-row">
-          <main className="flex-1 p-4">{children}</main>
+      <AuthProvider>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <div className="flex flex-row">
+            <main className="flex-1 p-4">{children}</main>
+          </div>
         </div>
-      </div>
+      </AuthProvider>
     </NextIntlClientProvider>
   );
 }
