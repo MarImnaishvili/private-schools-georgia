@@ -145,9 +145,9 @@ export default function SchoolsList({ schools }: SchoolsListProps) {
   return (
     <>
       {/* Search and Filters */}
-      <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl p-8 mb-6 border-2 border-blue-200 shadow-lg">
+      <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-slate-400 shadow-lg">
         {/* Section Title */}
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 text-center">
           🔍 {tForm("searchForSchools")}
         </h2>
         {/* Row 1: Search, City, District */}
@@ -293,9 +293,9 @@ export default function SchoolsList({ schools }: SchoolsListProps) {
           {filteredSchools.map((school) => (
             <div
               key={school.id}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-200"
+              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-4 md:p-6 border border-gray-200"
             >
-              <h3 className="text-xl font-bold text-gray-900 mb-3">{school.name}</h3>
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3">{school.name}</h3>
 
               {/* Info Row 1: Location, Phone, Website */}
               <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-3">
@@ -331,7 +331,7 @@ export default function SchoolsList({ schools }: SchoolsListProps) {
                       href={school.schoolsWebSite}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-blue-500 hover:text-blue-700 underline"
+                      className="text-sm text-blue-500 hover:text-blue-700 underline truncate max-w-[200px] sm:max-w-none"
                     >
                       {school.schoolsWebSite.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                     </a>

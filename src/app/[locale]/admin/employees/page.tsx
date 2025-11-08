@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -14,21 +14,29 @@ export default function EmployeeRegistrationPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string || "ka";
   const t = useTranslations("auth");
   const { role: currentUserRole, loading: authLoading } = useAuth();
+
+  // Redirect if not admin - use useEffect to avoid updating during render
+  useEffect(() => {
+    if (!authLoading && currentUserRole !== "admin") {
+      router.push(`/${locale}`);
+    }
+  }, [authLoading, currentUserRole, router, locale]);
 
   // Show loading while checking auth
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
-  // Redirect if not admin
+  // Don't render form if not admin
   if (currentUserRole !== "admin") {
-    router.push("/");
     return null;
   }
 
@@ -81,7 +89,7 @@ export default function EmployeeRegistrationPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 px-4">
       <div className="max-w-2xl w-full space-y-8 p-10 bg-white rounded-lg shadow-md">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

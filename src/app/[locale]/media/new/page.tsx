@@ -27,7 +27,8 @@ export default function NewMediaPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 p-6">
+      <div className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">{tMedia("Add New Media")}</h1>
       <form onSubmit={handleSubmit}>
         <MediaManager media={media} onChange={setMedia} />
@@ -38,6 +39,7 @@ export default function NewMediaPage() {
           {tMedia("Save Media")}
         </button>
       </form>
+      </div>
     </div>
   );
 }

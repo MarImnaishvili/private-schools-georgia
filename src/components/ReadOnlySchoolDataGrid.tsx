@@ -293,7 +293,7 @@ export default function ReadOnlySchoolsGrid() {
 
   if (loading) {
     return (
-      <div className="mt-12 h-screen max-w-5xl mx-auto flex items-center justify-center">
+      <div className="h-screen w-full flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading schools...</p>
@@ -304,7 +304,7 @@ export default function ReadOnlySchoolsGrid() {
 
   if (error) {
     return (
-      <div className="mt-12 h-screen max-w-5xl mx-auto flex items-center justify-center">
+      <div className="h-screen w-full flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 text-lg">{error}</p>
           <button
@@ -320,7 +320,7 @@ export default function ReadOnlySchoolsGrid() {
 
   if (!loading && rowData.length === 0) {
     return (
-      <div className="mt-12 w-full mx-auto px-4">
+      <div className="w-full px-4">
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
           <svg
             className="w-24 h-24 text-gray-300 mb-6"
@@ -349,7 +349,7 @@ export default function ReadOnlySchoolsGrid() {
   const showNoSearchResults = searchQuery && filteredRowData.length === 0;
 
   return (
-    <div className="mt-12 max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto px-4 pt-8">
       <div className="mb-4">
         <label htmlFor="school-search" className="sr-only">
           {tForm("searchPlaceholder")}
@@ -360,7 +360,7 @@ export default function ReadOnlySchoolsGrid() {
           placeholder={tForm("searchPlaceholder")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           aria-label={tForm("searchPlaceholder")}
         />
         {searchQuery && (

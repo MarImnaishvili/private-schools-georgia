@@ -119,7 +119,8 @@ export default function NewSchoolPage() {
   };
 
   return (
-    <div className="p-9 mt-8 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 p-4 sm:p-6 md:p-9 pt-8">
+      <div className="max-w-4xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
         <FormErrorSummary errors={errors} />
         <TopLevelFields register={register} errors={errors} />
@@ -190,6 +191,7 @@ export default function NewSchoolPage() {
           {isSubmitting ? tForm("submitting") : tForm("submit")}
         </button>
       </form>
+      </div>
     </div>
   );
 }
